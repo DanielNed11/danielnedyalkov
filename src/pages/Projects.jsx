@@ -1,30 +1,19 @@
-import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import ProjectCard from "../components/ProjectCard";
 import { projects } from "../data";
 
 function Projects() {
     return (
-            <section className="py-5">
-                <Container>
-                    <Row className="justify-content-center mb-5">
-                        <Col lg={8} className="text-center">
-                            <h2 className="display-4 fw-bold mb-3">Featured Projects</h2>
-                            <p className="lead text-muted">
-                                A showcase of my recent work and technical projects
-                            </p>
-                        </Col>
-                    </Row>
-
-                    <Row xs={1} md={2} lg={3} className="g-4 justify-content-center">
-                        {projects.map((project, index) => (
-                            <Col key={project.id}>
-                                <ProjectCard {...project} index={index} />
-                            </Col>
-                        ))}
-                    </Row>
-                </Container>
-            </section>
+        <Container className="container-fluid">
+            <h1 className="text-center mb-5">Projects</h1>
+            <Row xs={1} md={2} lg={4} className="g-4">
+                {projects.map((proj) => (
+                    <Col key={proj.id}>
+                        <ProjectCard {...proj} />
+                    </Col>
+                ))}
+            </Row>
+        </Container>
     );
 }
 

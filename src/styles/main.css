@@ -1,9 +1,260 @@
-@import './base.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
 
-@import './components/navbar.css';
-@import './components/hero.css';
-@import './components/skills.css';
-@import './components/projects.css';
-@import './components/contact.css';
-@import './components/buttons.css';
-@import 'components/utilities.css';
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: #e6edea;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #e8f1ed;
+}
+
+
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    color: #00d08a;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2.4rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.6rem;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #e6edea;
+    margin-bottom: 1rem;
+}
+
+.lead {
+    font-size: 1.2rem;
+    color: #f0f5f2;
+}
+
+ul, li {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn {
+    font-size: 1.05rem;
+    padding: 0.6rem 1.4rem;
+}
+
+.contact-links {
+    font-size: 1.1rem;
+}
+
+.contact-links a {
+    color: #00c48d;
+    text-decoration: none;
+    font-weight: 500;
+}
+.contact-links a:hover {
+    color: #00e89f;
+    text-decoration: underline;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    scroll-margin-top: 80px;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+    }
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #e6edea;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    color: #00c48d;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+a {
+    color: #00c48d;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #00e89f;
+    text-decoration: underline;
+}
+
+.navbar {
+    background-color: rgba(20, 56, 45, 0.95) !important;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-brand {
+    color: #00c48d !important;
+    font-weight: bold;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    color: #e6edea !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #00e89f !important;
+}
+
+.nav-link.active {
+    color: #00c48d !important;
+    font-weight: 600;
+}
+
+.container {
+    background-color: rgba(22, 63, 49, 0.85);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
+}
+
+.card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border-radius: 1rem;
+    background-color: rgba(26, 74, 58, 0.9) !important; /* dark green tone */
+    border: 1px solid #256550 !important;
+    color: #e6edea !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 196, 141, 0.3);
+}
+
+.navbar-toggler {
+    color: #e6edea !important;
+    border: 0px;
+    padding: 0;
+    background: none;
+
+}
+
+.card-img-top {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    background-color: #0f2e23;
+    transition: transform 0.3s ease-in-out;
+    padding: 15px;
+    border-radius: 1rem;
+
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.03);
+}
+
+footer {
+    background-color: rgba(20, 56, 45, 0.9);
+    color: #a9bcb6;
+    border-top: 1px solid #215143;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    padding: 1rem 0;
+}
+
+.card:hover .project-image {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 179, 120, 0.25);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1.2rem;
+    }
+    .card-img-top {
+        height: 180px;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #00c48d;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+    background: #0f2e23;
+}
+
+.hero-photo {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 16px;
+    object-fit: contain;
+}
+
+.text-accent {
+    color: #00c48d;
+}
+
+@media (max-width: 768px) {
+    .hero-photo {
+        max-width: 280px;
+        margin-bottom: 1rem;
+    }
+    .home-container {
+        text-align: center;
+        padding: 2rem 1.2rem;
+    }
+}
