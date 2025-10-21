@@ -11,9 +11,9 @@ function Contact() {
             </p>
 
             <div className="contact-links mt-4">
-                <p>📧 <strong>Email:</strong> <a href="mailto:daniel.nedyalkov@example.com">daniel.nedyalkov@example.com</a></p>
-                <p>💼 <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/daniel-nedyalkov" target="_blank">linkedin.com/in/daniel-nedyalkov</a></p>
-                <p>🐙 <strong>GitHub:</strong> <a href="https://github.com/DanielNed11" target="_blank">github.com/DanielNed11</a></p>
+                <p>📧 <strong>Email:</strong> <a href="mailto:dani.nedqlkow@gmail.com">dani.nedqlkow@gmail.com</a></p>
+                <p>💼 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/daniel-nedyalkov17" target="_blank">Daniel Nedyalkov</a></p>
+                <p>🐙 <strong>GitHub:</strong> <a href="https://github.com/DanielNed11" target="_blank">DanielNed11</a></p>
             </div>
 
             <a href="mailto:dani.nedqlkow@gmail.com" className="btn btn-outline-success mt-3">
