@@ -1,34 +1,64 @@
 import React from "react";
-import "../styles/main.css";
+import { Container, Row, Col } from "react-bootstrap";
+import { motion } from "framer-motion";
 
 function Home() {
-    return (
-        <div className="container home-container mt-5 mb-5 p-4">
-            <div className="row align-items-center">
-                {/* Left side: your photo */}
-                <div className="col-md-5 text-center mb-4 mb-md-0">
-                    <img
-                        src="/assets/profile.png"
-                        alt="Daniel Nedyalkov"
-                        className="hero-photo"
-                    />
-                </div>
+    const scrollToProjects = () => {
+        const projectsSection = document.getElementById("projects");
+        if (projectsSection) {
+            projectsSection.scrollIntoView({ behavior: "smooth" });
+        }
+    };
 
-                {/* Right side: intro text */}
-                <div className="col-md-7 text-center text-md-start">
-                    <h1 className="fw-bold display-5 mb-3">
-                        Hi, I’m <span className="text-accent">Daniel Nedyalkov</span> 👋
-                    </h1>
-                    <p className="lead">
-                        I’m a second-year <strong>Applied Computer Science</strong> student passionate about
-                        <strong> full-stack development</strong>, <strong>IoT systems</strong>, and <strong>embedded programming</strong>.
-                    </p>
-                    <a href="/projects" className="btn btn-success mt-3">
-                        Explore My Projects
-                    </a>
-                </div>
-            </div>
-        </div>
+    return (
+        <section className="min-vh-100 d-flex align-items-center">
+            <Container>
+                <Row className="justify-content-center text-center">
+                    <Col lg={8} xl={6}>
+                        <motion.h1
+                            className="display-3 fw-bold mb-4"
+                            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                        >
+                            Hi, I'm <span className="name">Daniel Nedyalkov</span> 👋
+                        </motion.h1>
+
+                        <motion.p
+                            className="lead mb-4"
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4, duration: 1 }}
+                        >
+                            I'm a second-year <strong>Applied Computer Science</strong> student passionate about
+                            <strong> full-stack development</strong>, <strong> IoT systems</strong>, and
+                            <strong> embedded programming</strong>.
+                        </motion.p>
+
+                        <motion.div
+                            className="d-flex flex-column flex-sm-row gap-3 justify-content-center"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8, duration: 0.8 }}
+                        >
+                            <button onClick={scrollToProjects} className="btn px-4">
+                                My Projects
+                            </button>
+                            <button
+                                onClick={() =>
+                                    document
+                                        .getElementById("contact")
+                                        ?.scrollIntoView({ behavior: "smooth" })
+                                }
+                                className="btn btn-outline px-4"
+                            >
+                                Get In Touch
+                            </button>
+                        </motion.div>
+                    </Col>
+                </Row>
+            </Container>
+        </section>
     );
 }
 
