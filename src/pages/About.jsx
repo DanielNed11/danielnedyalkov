@@ -58,7 +58,7 @@ function About() {
 
                                 <div className="mb-4">
                                     <h5 className="mb-3 text-muted">Programming Languages</h5>
-                                    <div className="d-flex flex-wrap gap-2">
+                                    <div className="d-flex flex-wrap gap-2 bg-transparent">
                                         {skills.languages.map((skill, index) => (
                                             <Badge key={index} bg="primary" className="px-3 py-2 fw-semibold">
                                                 {skill}
@@ -69,7 +69,7 @@ function About() {
 
                                 <div className="mb-4">
                                     <h5 className=" mb-3 text-muted">Frameworks</h5>
-                                    <div className="d-flex flex-wrap gap-2">
+                                    <div className="d-flex flex-wrap gap-2 bg-transparent">
                                         {skills.frameworks.map((skill, index) => (
                                             <Badge key={index} bg="secondary" className="px-3 py-2 fw-semibold">
                                                 {skill}
@@ -80,7 +80,7 @@ function About() {
 
                                 <div>
                                     <h5 className=" mb-3 text-muted">Tools & Technologies</h5>
-                                    <div className="d-flex flex-wrap gap-2">
+                                    <div className="d-flex flex-wrap gap-2 bg-transparent">
                                         {skills.tools.map((skill, index) => (
                                             <Badge key={index} bg="info" className="px-3 py-2 fw-semibold">
                                                 {skill}

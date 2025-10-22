@@ -9,7 +9,7 @@
     --badge-info: #8e7da8;
 
     /* Soft green-tinted background */
-    --bg: #f4f8f4;
+    --bg: #daf3da;
     --text: #2a2a2a;
     --text-muted: #5a6b5e;
 
@@ -93,6 +93,11 @@ html, body, #root {
 section {
     padding-top: 5rem;
     padding-bottom: 5rem;
+}
+
+/* Force background on all containers */
+.d-flex, .flex-column, .min-vh-100, main {
+    background: var(--bg) !important;
 }
 
 /* === Minimal Navbar === */
