@@ -65,7 +65,7 @@ function Contact() {
                         <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                             <a
                                 href="mailto:dani.nedqlkow@gmail.com"
-                                className="btn px-4"
+                                className="btn-sm px-4"
                             >
                                 Send me an Email
                             </a>
@@ -73,7 +73,7 @@ function Contact() {
                                 href="https://www.linkedin.com/in/daniel-nedyalkov17"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn px-4"
+                                className="btn-sm px-4"
                             >
                                 Connect on LinkedIn
                             </a>
