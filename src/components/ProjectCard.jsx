@@ -94,10 +94,9 @@ function ProjectCard({
                         />
                         <div className="project-overlay" />
 
-                        {/* Status Badge */}
                         <Badge
                             bg={getStatusVariant(status)}
-                            className="position-absolute top-0 end-0 m-3 px-3 py-2"
+                            className="position-absolute top-0 end-0 m-3 px-3 py-2 z-1"
                         >
                             {isFinished ? "✓ Completed" : status === "development" ? "🔨 In Progress" : "📋 Planning"}
                         </Badge>

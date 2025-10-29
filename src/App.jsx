@@ -1,4 +1,3 @@
-import { BrowserRouter as Router } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { motion } from "framer-motion";
 import NavigationBar from "./components/Navbar";
@@ -10,7 +9,7 @@ import "./styles/main.css";
 
 function App() {
     return (
-        <Router>
+
             <motion.div
                 className="d-flex flex-column min-vh-100"
                 initial={{ opacity: 0 }}
@@ -40,12 +39,11 @@ function App() {
                 <footer className="py-4">
                     <Container>
                         <p className="text-center mb-0">
-                            © {new Date().getFullYear()} Daniel Nedyalkov. Built with React & modern web technologies.
+                            Daniel Nedyalkov
                         </p>
                     </Container>
                 </footer>
             </motion.div>
-        </Router>
     );
 }
 

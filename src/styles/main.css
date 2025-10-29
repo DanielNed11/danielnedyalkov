@@ -1,46 +1,30 @@
 :root {
-    /* Vibrant sage green accent - elegant and calming */
     --accent: #4a9d7a;
     --accent-hover: #3d8265;
-
-    /* Badge colors - distinct variations */
     --badge-primary: #4a9d7a;
     --badge-secondary: #6b9db8;
     --badge-info: #8e7da8;
-
-    /* Soft green-tinted background */
     --bg: #daf3da;
     --text: #2a2a2a;
     --text-muted: #5a6b5e;
-
-    /* Subtle mint-cream cards with warmth */
     --card-bg: #fdfffd;
     --shadow: 0 4px 12px rgba(74, 157, 122, 0.12);
     --transition: 0.3s ease;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
 }
 
-/* === Dark theme - DARK THEME (Deep Plum & Charcoal) === */
 [data-theme="dark"] {
-    /* Vibrant purple accent - sophisticated and luxurious */
     --accent: #9378bc;
     --accent-hover: #5b4d70;
-
-    /* Badge colors - distinct variations */
     --badge-primary: #a688d4;
     --badge-secondary: #7d9fc9;
     --badge-info: #c98ba6;
-
-    /* Deep purple-tinted charcoal */
     --bg: #1a171e;
     --text: #e8e8e8;
     --text-muted: #a798b5;
-
-    /* Purple-elevated card color */
     --card-bg: #26222d;
     --shadow: 0 4px 12px rgba(166, 136, 212, 0.15);
 }
-/* Apply dark theme to all major containers */
 [data-theme="dark"] body,
 [data-theme="dark"] main,
 [data-theme="dark"] section,
@@ -63,24 +47,20 @@
     color: var(--text) !important;
 }
 
-/* Navbar */
 [data-theme="dark"] .modern-navbar {
     background: rgba(20,20,20,0.6);
 }
 
-/* Cards */
 [data-theme="dark"] .card {
     background: var(--card-bg) !important;
     color: var(--text);
 }
 
-/* Footer */
 [data-theme="dark"] footer {
     background: var(--card-bg) !important;
     color: var(--text-muted);
 }
 
-/* === Global === */
 html, body, #root {
     margin: 0;
     padding: 0;
@@ -95,12 +75,9 @@ section {
     padding-bottom: 5rem;
 }
 
-/* Force background on all containers */
 .d-flex, .flex-column, .min-vh-100, main {
     background: var(--bg) !important;
 }
-
-/* === Minimal Navbar === */
 
 .minimal-navbar {
     position: fixed;
@@ -108,19 +85,19 @@ section {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.45);
     border-radius: 50px;
-    padding: 16px 32px;
-    box-shadow: var(--shadow);
+    padding: 8px 24px;
+    border: 1px solid rgba(255,255,255,0.8);
     transition: var(--transition);
-    max-width: 90%;
     width: auto;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
 }
 
 [data-theme="dark"] .minimal-navbar {
-    background: rgba(38, 34, 45, 0.85);
-    box-shadow: 0 4px 20px rgba(166, 136, 212, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255,255,255,0.28);
 }
 
 .navbar-content {
@@ -147,56 +124,105 @@ section {
     cursor: pointer;
     transition: all 0.25s ease;
     white-space: nowrap;
+    position: relative;
+}
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width .3s ease, left .3s ease;
+}
+.nav-link:hover::after {
+    width: 80%;
+    left: 10%;
 }
 
 .nav-link:hover {
-    color: var(--accent);
-    background: rgba(74, 157, 122, 0.12);
-    transform: translateY(-1px);
+    background: transparent;
 }
 
-[data-theme="dark"] .nav-link:hover {
-    background: rgba(166, 136, 212, 0.18);
+.hamburger {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+.hamburger::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 2px;
+  background: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) rotate(90deg);
+  transition: transform .3s ease;
+}
+.hamburger::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 2px;
+  background: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  transition: opacity .3s ease;
 }
 
-.nav-link.active {
-    color: #ffffff;
-    background: var(--accent);
-    box-shadow: 0 4px 12px rgba(74, 157, 122, 0.25);
+.hamburger.active::before {
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
-[data-theme="dark"] .nav-link.active {
-    box-shadow: 0 4px 12px rgba(166, 136, 212, 0.3);
+.hamburger.active::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-/* Mobile: Hide navbar, show only theme toggle in corner */
 @media (max-width: 768px) {
-    .minimal-navbar {
-        top: 16px;
-        right: 16px;
-        left: auto;
-        transform: none;
-        padding: 8px;
-        background: transparent;
-        backdrop-filter: none;
-        box-shadow: none;
-    }
 
-    [data-theme="dark"] .minimal-navbar {
-        background: transparent;
-        box-shadow: none;
+    .minimal-navbar {
+        padding: 4px 12px;
+        border-radius: 30px;
     }
 
     .navbar-content {
-        gap: 0;
+        align-items: center;
+    }
+
+    [data-theme="dark"] .minimal-navbar {
+        box-shadow: none;
+    }
+
+    .hamburger {
+        display: flex;
     }
 
     .nav-links {
         display: none;
     }
+    .nav-links.show {
+        display: flex;
+        flex-direction: column;
+        background: rgba(255,255,255,0.85);
+        padding: 12px;
+        border-radius: 12px;
+        position: absolute;
+        right: 0;
+        top: 50px;
+    }
+    [data-theme="dark"] .nav-links.show {
+        background: rgba(38,34,45,0.85);
+    }
 }
 
-/* === Brand text === */
 .brand-text {
     font-weight: 700;
     font-size: 1.2rem;
@@ -206,7 +232,6 @@ section {
     color: var(--text) !important;
 }
 
-/* === Hero / Home === */
 .name {
     background: linear-gradient(90deg, var(--accent), var(--accent-hover));
     background-clip: text;
@@ -219,7 +244,6 @@ section {
     to { background-position: 100% 50%; }
 }
 
-/* === Cards === */
 .project-card {
     background: var(--card-bg) !important;
     border-radius: 16px !important;
@@ -318,7 +342,6 @@ section {
     justify-content: center;
 }
 
-/* Mobile card button adjustments */
 @media (max-width: 768px) {
     .btn,
     .btn-disabled {
@@ -337,7 +360,6 @@ section {
     }
 }
 
-/* === Theme Toggle === */
 .theme-toggle {
     width: 60px;
     height: 30px;
@@ -363,7 +385,6 @@ section {
     box-shadow: 0 0 10px var(--accent-hover);
 }
 
-/* Icon container */
 .toggle-circle {
     width: 24px;
     height: 24px;
@@ -376,8 +397,6 @@ section {
     left: 3px;
 }
 
-
-/* === Fade/slide classes (for later animation triggers) === */
 .animate-fade-in {
     opacity: 0;
     transform: translateY(30px);
@@ -396,7 +415,6 @@ section {
     letter-spacing: 0.3px;
 }
 
-/* Different badge variants using opacity variations */
 .badge.bg-primary {
     background: var(--badge-primary) !important;
 }
@@ -416,4 +434,3 @@ html, body, section, main, footer, .card, .navbar, .btn {
             box-shadow 0.5s ease,
             border-color 0.5s ease;
 }
-
