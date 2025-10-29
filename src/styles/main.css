@@ -155,6 +155,7 @@ section {
   cursor: pointer;
   position: relative;
 }
+
 .hamburger::before {
   content: "";
   position: absolute;
