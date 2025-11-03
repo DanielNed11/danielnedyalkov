@@ -1,4 +1,3 @@
-import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
 
@@ -17,38 +16,15 @@ function ThemeToggle() {
         setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
     return (
-        <motion.div
-            className="theme-toggle"
-            onClick={toggleTheme}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        >
-            <AnimatePresence mode="wait" initial={false}>
+        <div className="theme-toggle" onClick={toggleTheme}>
+            <div className="toggle-circle">
                 {theme === "light" ? (
-                    <motion.div
-                        key="sun"
-                        className="toggle-circle"
-                        initial={{ x: 0, opacity: 0, rotate: -30 }}
-                        animate={{ x: 0, opacity: 1, rotate: 0 }}
-                        exit={{ x: 30, opacity: 0, rotate: 30 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                    >
-                        <Sun size={16} color="#f5c542" strokeWidth={2.2} />
-                    </motion.div>
+                    <Sun size={16} color="#f5c542" strokeWidth={2.2} />
                 ) : (
-                    <motion.div
-                        key="moon"
-                        className="toggle-circle"
-                        initial={{ x: -20, opacity: 0, rotate: 30 }}
-                        animate={{ y: -2, x: 27, opacity: 1, rotate: 0 }}
-                        exit={{ x: 0, opacity: 0, rotate: -30 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                    >
-                        <Moon size={15} color="#d4d4d4" strokeWidth={2.2} />
-                    </motion.div>
+                    <Moon size={16} color="#d4d4d4" strokeWidth={2.2} />
                 )}
-            </AnimatePresence>
-        </motion.div>
+            </div>
+        </div>
     );
 }
 

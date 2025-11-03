@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { motion } from "framer-motion";
+import { useEffect } from "react";
 import NavigationBar from "./components/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -8,16 +8,21 @@ import Contact from "./pages/Contact";
 import "./styles/main.css";
 
 function App() {
+    useEffect(() => {
+        // Add preload class to disable transitions on initial load
+        document.body.classList.add('preload');
+
+        // Remove preload class after a short delay to enable transitions
+        const timer = setTimeout(() => {
+            document.body.classList.remove('preload');
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
-
-            <motion.div
-                className="d-flex flex-column min-vh-100"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-            >
+            <>
                 <NavigationBar />
-
                 <main className="flex-grow-1">
                     <section id="home">
                         <Home />
@@ -43,7 +48,7 @@ function App() {
                         </p>
                     </Container>
                 </footer>
-            </motion.div>
+            </>
     );
 }
 

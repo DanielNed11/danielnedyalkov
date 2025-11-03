@@ -33,9 +33,21 @@ export const projects = [
         technologies: ["Java", "Spring Boot", "Thymeleaf", "Bootstrap"],
         image: placeholder,
         isFinished: false,
-        status: "planning",
+        status: "development",
         github: "",
         featured: true,
         category: "Web Application"
+    },
+    {
+        id: 4,
+        title: "Chess Engine",
+        description: "A custom-built chess engine written in C++ featuring piece movement logic, move validation, board representation, and future AI search capabilities.",
+        technologies: ["C++", "WASM", "CMake", "Algorithms"],
+        image: placeholder,
+        isFinished: false,
+        status: "planning",
+        github: "",
+        featured: true,
+        category: "Console Application"
     },
 ];

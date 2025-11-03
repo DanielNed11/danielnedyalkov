@@ -2,11 +2,9 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import ProjectCard from "../components/ProjectCard";
 import { projects } from "../data";
-import AnimatedSection from "../components/AnimatedSection.jsx";
 
 function Projects() {
     return (
-        <AnimatedSection parallax={false}>
             <section className="py-5">
                 <Container>
                     <Row className="justify-content-center mb-5">
@@ -27,7 +25,6 @@ function Projects() {
                     </Row>
                 </Container>
             </section>
-        </AnimatedSection>
     );
 }
 
