@@ -1,0 +1,26 @@
+.contact-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    text-decoration: none !important;
+    color: inherit;
+}
+
+@media (hover: hover) {
+    .contact-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+        border-color: var(--accent);
+    }
+
+    [data-theme="dark"] .contact-card:hover {
+        box-shadow: 0 12px 40px rgba(166, 136, 212, 0.25) !important;
+    }
+
+    .contact-card .display-4 {
+        transition: transform 0.3s ease;
+    }
+
+    .contact-card:hover .display-4 {
+        transform: scale(1.1) rotate(5deg);
+    }
+}

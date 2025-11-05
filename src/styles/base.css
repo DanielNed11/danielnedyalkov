@@ -1,0 +1,109 @@
+/* ===== CSS VARIABLES ===== */
+:root {
+    --accent: #4a9d7a;
+    --accent-hover: #3d8265;
+    --badge-primary: #4a9d7a;
+    --badge-secondary: #6b9db8;
+    --badge-info: #8e7da8;
+    --bg: #daf3da;
+    --text: #2a2a2a;
+    --text-muted: #5a6b5e;
+    --card-bg: #fdfffd;
+    --shadow: 0 4px 12px rgba(74, 157, 122, 0.12);
+    --transition: 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+}
+
+[data-theme="dark"] {
+    --accent: #9378bc;
+    --accent-hover: #9e88cb;
+    --badge-primary: #a688d4;
+    --badge-secondary: #7d9fc9;
+    --badge-info: #c98ba6;
+    --bg: #1a171e;
+    --text: #e8e8e8;
+    --text-muted: #a798b5;
+    --card-bg: #26222d;
+    --shadow: 0 4px 12px rgba(166, 136, 212, 0.15);
+}
+
+/* ===== DARK THEME OVERRIDES ===== */
+[data-theme="dark"] body,
+[data-theme="dark"] main,
+[data-theme="dark"] section,
+[data-theme="dark"] footer {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .lead,
+[data-theme="dark"] p,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: var(--text) !important;
+}
+
+[data-theme="dark"] .card {
+    background: var(--card-bg) !important;
+    color: var(--text);
+}
+
+[data-theme="dark"] footer {
+    background: var(--card-bg) !important;
+    color: var(--text-muted);
+}
+
+/* ===== GLOBAL RESETS ===== */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    background: var(--bg) !important;
+    color: var(--text);
+    scroll-behavior: smooth;
+}
+
+section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.d-flex, .flex-column, .min-vh-100, main {
+    background: var(--bg) !important;
+}
+
+/* ===== SCROLL PROGRESS BAR ===== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    transform-origin: 0;
+    z-index: 9999;
+}
+
+/* ===== SMOOTH TRANSITIONS FOR THEME SWITCHING ===== */
+* {
+    transition:
+            background-color 0.5s ease,
+            background 0.5s ease,
+            color 0.5s ease,
+            border-color 0.5s ease,
+            box-shadow 0.5s ease,
+            fill 0.5s ease,
+            stroke 0.5s ease;
+}
+
+/* Disable transitions on page load to prevent theme flash */
+.preload * {
+    transition: none !important;
+}

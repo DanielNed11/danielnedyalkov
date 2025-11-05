@@ -1,0 +1,190 @@
+/* ===== SKILLS SECTION ===== */
+.skill-section {
+    margin-bottom: 4rem;
+}
+
+.skill-section-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.skill-section-icon {
+    font-size: 2rem;
+}
+
+.skill-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text);
+}
+
+.skill-section-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+}
+
+.skill-flip-card {
+    width: 100%;
+    height: 160px;
+    position: relative;
+    perspective: 1000px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 16px;
+}
+
+@media (hover: hover) {
+    .skill-flip-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        border: 2px solid var(--accent);
+    }
+}
+
+.skill-flip-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+.skill-flip-card.flipped .skill-flip-inner {
+    transform: rotateY(180deg);
+}
+
+.skill-flip-front,
+.skill-flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    overflow: hidden;
+}
+
+.skill-flip-back {
+    transform: rotateY(180deg);
+}
+
+/* Front styling */
+.skill-flip-front {
+    z-index: 2;
+    background: linear-gradient(135deg, var(--card-bg), rgba(74,157,122,0.08));
+    border: 1px solid rgba(74,157,122,0.2);
+}
+
+/* Back styling */
+.skill-flip-back {
+    background: linear-gradient(135deg, var(--card-bg), rgba(74,157,122,0.1));
+    border: 1px solid rgba(74,157,122,0.25);
+    text-align: center;
+}
+
+/* Icon & text */
+.skill-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+
+@media (hover: hover) {
+    .skill-flip-card:hover .skill-icon {
+        transform: scale(1.2) rotate(3deg);
+    }
+}
+
+.skill-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--text);
+}
+
+.skill-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    opacity: 0.7;
+}
+
+@media (hover: hover) {
+    .skill-flip-card:hover .skill-hint {
+        opacity: 1;
+        color: var(--accent);
+    }
+}
+
+/* Back content */
+.skill-back-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+    z-index: 1;
+}
+
+.skill-back-description {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text);
+    opacity: 0.9;
+    margin-bottom: 8px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    z-index: 1;
+}
+
+.skill-back-projects {
+    font-size: 0.70rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+    opacity: 0.8;
+    margin-bottom: 8px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    z-index: 1;
+
+}
+
+.skill-flip-card:not(.flipped) .skill-flip-inner {
+    transition: none;
+}
+
+/* ===== RESPONSIVE FIXES FOR SMALL DEVICES ===== */
+@media (max-width: 768px) {
+    .skill-back-description {
+        -webkit-line-clamp: 5;
+    }
+}
+
+@media (max-width: 480px) {
+    .skill-back-description {
+        -webkit-line-clamp: 6;
+    }
+    .skill-icon {
+        font-size: 2rem;
+    }
+    .skill-name {
+        font-size: 0.9rem;
+    }
+    .skill-flip-front,
+    .skill-flip-back {
+        padding: 10px;
+    }
+}

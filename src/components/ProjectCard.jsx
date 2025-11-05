@@ -1,0 +1,91 @@
+import React from "react";
+import { Card, Badge } from "react-bootstrap";
+import placeholder from "../assets/placeholder.png";
+
+function ProjectCard({
+                         title,
+                         description,
+                         technologies,
+                         image,
+                         isFinished,
+                         github,
+                         status = "development",
+                     }) {
+    const handleImageError = (e) => {
+        e.target.src = placeholder;
+    };
+
+    const getStatusVariant = (status) => {
+        switch (status) {
+            case "completed": return "success";
+            case "development": return "warning";
+            case "planning": return "info";
+            default: return "warning";
+        }
+    };
+
+    return (
+        <div style={{ height: "100%" }}>
+            <div className="project-card-wrapper" style={{ height: "100%" }}>
+                <Card className="project-card h-100 border-0">
+                    {/* Image Container with Overlay */}
+                    <div className="project-image-container position-relative overflow-hidden">
+                        <img
+                            src={image}
+                            alt={title}
+                            className="project-image"
+                            onError={handleImageError}
+                        />
+                        <div className="project-overlay" />
+
+                        <Badge
+                            bg={getStatusVariant(status)}
+                            className="position-absolute top-0 end-0 m-3 px-3 py-2 z-1"
+                        >
+                            {isFinished ? "✓ Completed" : status === "development" ? "🔨 Almost Finished" : "📋 Developing"}
+                        </Badge>
+                    </div>
+
+                    <Card.Body className="d-flex flex-column p-4">
+                        <Card.Title className="h4 fw-bold mb-3 text-center">{title}</Card.Title>
+                        <Card.Text className="flex-grow-1 text-muted mb-4 text-center">
+                            {description}
+                        </Card.Text>
+
+                        <div className="mb-4">
+                            <div className="d-flex flex-wrap gap-2 justify-content-center">
+                                {technologies.map((tech, idx) => (
+                                    <Badge key={idx} bg="primary" className="tech-badge px-3 py-2 align-items-center">
+                                        {tech}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-auto">
+                            {isFinished && github ? (
+                                <a
+                                    href={github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn w-100 "
+                                >
+                                    View on GitHub
+                                </a>
+                            ) : (
+                                <button
+                                    disabled
+                                    className="btn w-100 btn-disabled"
+                                >
+                                    Coming Soon
+                                </button>
+                            )}
+                        </div>
+                    </Card.Body>
+                </Card>
+            </div>
+        </div>
+    );
+}
+
+export default ProjectCard;
