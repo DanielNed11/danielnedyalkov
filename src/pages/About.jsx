@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { FaJava, FaPython, FaJsSquare, FaReact, FaGitAlt } from "react-icons/fa";
-import { SiCplusplus, SiPostgresql, SiSpring, SiFlask, SiBootstrap, SiArduino } from "react-icons/si";
+import { SiCplusplus, SiPostgresql, SiSpring, SiBootstrap, SiArduino } from "react-icons/si";
 
 function About() {
     const [flippedCards, setFlippedCards] = useState(new Set());
@@ -28,7 +28,6 @@ function About() {
         ],
         frameworks: [
             { id: 'spring', name: 'Spring Boot', icon: <SiSpring />, description: 'Enterprise REST APIs, layered architecture, dependency injection and services', projects: 'F1 Management System' },
-            { id: 'flask', name: 'Flask', icon: <SiFlask />, description: 'Lightweight backend for rapid prototyping and sensor-driven data ingestion', projects: 'Clean Tank' },
             { id: 'react', name: 'React', icon: <FaReact />, description: 'Dynamic UI composition using components, hooks, routing and state patterns', projects: 'Portfolio' },
             { id: 'javafx', name: 'JavaFX', icon: <FaJava />, description: 'Interactive desktop UIs, event-driven game logic and custom rendering', projects: 'Blockade 3D Game' },
             { id: 'bootstrap', name: 'Bootstrap', icon: <SiBootstrap />, description: 'Responsive UI layout, utility classes and theme-oriented styling', projects: 'Portfolio, F1 Management System' },
