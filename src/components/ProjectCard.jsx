@@ -35,6 +35,7 @@ function ProjectCard({
                             alt={title}
                             className="project-image"
                             onError={handleImageError}
+                            loading="lazy" // Added lazy loading
                         />
                         <div className="project-overlay" />
 

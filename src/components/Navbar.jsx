@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ThemeToggle from "./ThemeToggle.jsx";
 
-function NavigationBar() {
-    const [activeSection, setActiveSection] = useState("home");
+function NavigationBar({ activeSection }) { // Accept activeSection as prop
     const [menuOpen, setMenuOpen] = useState(false);
 
     const scrollTo = (id) => {
@@ -10,7 +9,7 @@ function NavigationBar() {
         if (el) {
             el.scrollIntoView({ behavior: "smooth" });
             setMenuOpen(false);
-            setActiveSection(id);
+            // activeSection is now managed by parent, no need to setActiveSection here
         }
     };
 
@@ -22,21 +21,11 @@ function NavigationBar() {
         {id: "contact", label: "Contact"}
     ];
 
-    useEffect(() => {
+    // Removed useEffect for scroll handling, as activeSection is now a prop
+
+    // Keep the scroll effect for the navbar background
+    React.useEffect(() => {
         const handleScroll = () => {
-            const sections = navItems.map(item => document.getElementById(item.id));
-            const scrollPos = window.scrollY + 100;
-
-            for (let i = sections.length - 1; i >= 0; i--) {
-                if (sections[i] && sections[i].offsetTop <= scrollPos) {
-
-                    if (activeSection !== navItems[i].id) {
-                        setActiveSection(navItems[i].id);
-                    }
-                    break;
-                }
-            }
-
             const nav = document.querySelector('.minimal-navbar');
             if (nav) {
                 if (window.scrollY > 50) nav.classList.add('scrolled');
@@ -46,7 +35,7 @@ function NavigationBar() {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [activeSection, navItems]);
+    }, []); // Empty dependency array as it doesn't depend on component state for section tracking
 
     return (
         <nav className="minimal-navbar">
@@ -54,13 +43,17 @@ function NavigationBar() {
                 <button className={`hamburger ${menuOpen ? 'active' : ''}`} onClick={() => setMenuOpen(!menuOpen)}></button>
                 <div className={`nav-links ${menuOpen ? 'show' : ''}`}>
                     {navItems.map((item) => (
-                        <button
+                        <a
                             key={item.id}
-                            onClick={() => scrollTo(item.id)}
+                            href={`#${item.id}`} // Add href attribute
+                            onClick={(e) => {
+                                e.preventDefault(); // Prevent default anchor behavior
+                                scrollTo(item.id);
+                            }}
                             className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
                         >
                             {item.label}
-                        </button>
+                        </a>
                     ))}
                 </div>
                 <ThemeToggle />

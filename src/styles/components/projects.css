@@ -1,10 +1,10 @@
 /* ===== PROJECT CARDS ===== */
 .project-card {
-    background: var(--card-bg) !important;
-    border-radius: 16px !important;
+    background: var(--card-bg);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: var(--theme-transition), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     border: 2px solid transparent;
 }
@@ -36,20 +36,12 @@
 
     .project-card:hover {
         transform: translateY(-12px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         border-color: var(--accent);
     }
 
     [data-theme="dark"] .project-card:hover {
-        box-shadow: 0 20px 40px rgba(166, 136, 212, 0.3) !important;
-    }
-
-    .project-card:hover .project-image {
-        transform: scale(1.08);
-    }
-
-    .project-card:hover .project-overlay {
-        background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.1) 100%);
+        box-shadow: 0 20px 40px rgba(166, 136, 212, 0.3);
     }
 }
 
@@ -68,7 +60,7 @@
 }
 
 [data-theme="dark"] .project-card {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .project-card-wrapper {
@@ -114,8 +106,8 @@
 .tech-badge {
     font-size: 0.85rem;
     font-weight: 500;
-    border-radius: 8px !important;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    transition: box-shadow var(--transition-speed) ease, transform 0.2s ease;
     cursor: default;
 }
 

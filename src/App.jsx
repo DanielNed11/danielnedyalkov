@@ -1,6 +1,7 @@
+import React, { useState, useCallback } from "react";
 import { Container } from "react-bootstrap";
-import { useEffect } from "react";
 import NavigationBar from "./components/Navbar";
+import SectionObserver from "./components/SectionObserver"; // Import SectionObserver
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
@@ -8,37 +9,31 @@ import Contact from "./pages/Contact";
 import "./styles/main.css";
 
 function App() {
-    useEffect(() => {
-        // Add preload class to disable transitions on initial load
-        document.body.classList.add('preload');
+    const [activeSection, setActiveSection] = useState("home");
 
-        // Remove preload class after a short delay to enable transitions
-        const timer = setTimeout(() => {
-            document.body.classList.remove('preload');
-        }, 100);
-
-        return () => clearTimeout(timer);
+    const handleSectionChange = useCallback((sectionId) => {
+        setActiveSection(sectionId);
     }, []);
 
     return (
             <>
-                <NavigationBar />
+                <NavigationBar activeSection={activeSection} />
                 <main className="flex-grow-1">
-                    <section id="home">
+                    <SectionObserver id="home" onSectionChange={handleSectionChange}>
                         <Home />
-                    </section>
+                    </SectionObserver>
 
-                    <section id="about">
+                    <SectionObserver id="about" onSectionChange={handleSectionChange}>
                         <About />
-                    </section>
+                    </SectionObserver>
 
-                    <section id="projects">
+                    <SectionObserver id="projects" onSectionChange={handleSectionChange}>
                         <Projects />
-                    </section>
+                    </SectionObserver>
 
-                    <section id="contact">
+                    <SectionObserver id="contact" onSectionChange={handleSectionChange}>
                         <Contact />
-                    </section>
+                    </SectionObserver>
                 </main>
 
                 <footer className="py-4">
