@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { FaGithub, FaLinkedin, FaDownload } from "react-icons/fa6";
 import { MdEmail} from "react-icons/md";
+import cvFile from "../assets/Daniel Nedyalkov CV.pdf";
 
 const contactInfo = [
     {
@@ -61,9 +62,9 @@ function Contact() {
                     </Row>
 
 
-                    <Row className="justify-content-center">
+                    <Row className="justify-content-center mb-5">
                         <Col className="text-center">
-                            <a href="src/assets/Daniel Nedyalkov CV.pdf" download className="btn-sm px-4">
+                            <a href={cvFile} download="Daniel Nedyalkov CV.pdf" className="btn-sm px-4">
                                 <FaDownload /> Download Resume
                             </a>
                         </Col>

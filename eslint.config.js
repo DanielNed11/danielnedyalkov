@@ -26,4 +26,10 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]|motion' }],
     },
   },
+  {
+    files: ['vite.config.js'], // Apply to vite.config.js only
+    languageOptions: {
+      globals: globals.node, // Enable Node.js globals
+    },
+  },
 ])

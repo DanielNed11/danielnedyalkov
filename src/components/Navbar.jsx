@@ -17,6 +17,7 @@ function NavigationBar({ activeSection }) { // Accept activeSection as prop
     navItems = [
         {id: "home", label: "Home"},
         {id: "about", label: "About"},
+        {id: "journey", label: "Journey"},
         {id: "projects", label: "Projects"},
         {id: "contact", label: "Contact"}
     ];

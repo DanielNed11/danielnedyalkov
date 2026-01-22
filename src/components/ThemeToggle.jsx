@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sun, Moon } from "lucide-react";
+import { FiSun, FiMoon } from "react-icons/fi";
 
 function ThemeToggle() {
     const prefersDark =
@@ -12,16 +12,26 @@ function ThemeToggle() {
         document.documentElement.setAttribute("data-theme", theme);
     }, [theme]);
 
-    const toggleTheme = () =>
+    const toggleTheme = () => {
+        // Add transition class
+        document.documentElement.classList.add('theme-transitioning');
+        
+        // Change theme
         setTheme((prev) => (prev === "light" ? "dark" : "light"));
+        
+        // Remove transition class after animation completes
+        setTimeout(() => {
+            document.documentElement.classList.remove('theme-transitioning');
+        }, 400); // Match your --transition-speed
+    };
 
     return (
         <div className="theme-toggle" onClick={toggleTheme}>
             <div className="toggle-circle">
                 {theme === "light" ? (
-                    <Sun size={16} color="#f5c542" strokeWidth={2.2} />
+                    <FiSun size={16} color="#f5c542" strokeWidth={2.2} />
                 ) : (
-                    <Moon size={16} color="#d4d4d4" strokeWidth={2.2} />
+                    <FiMoon size={16} color="#d4d4d4" strokeWidth={2.2} />
                 )}
             </div>
         </div>

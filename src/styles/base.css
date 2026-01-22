@@ -69,18 +69,15 @@ html, body, #root {
     background: var(--bg);
     color: var(--text);
     scroll-behavior: smooth;
-    transition: var(--theme-transition);
 }
 
 section {
     padding-top: 5rem;
     padding-bottom: 5rem;
-    transition: var(--theme-transition);
 }
 
 .d-flex, .flex-column, .min-vh-100, main {
     background: var(--bg);
-    transition: var(--theme-transition);
 }
 
 /* ===== SCROLL PROGRESS BAR ===== */
@@ -95,12 +92,53 @@ section {
     z-index: 9999;
 }
 
+/* Apply transitions to ALL elements during theme change */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+    transition: background-color 0.4s ease,
+                color 0.4s ease,
+                border-color 0.4s ease,
+                box-shadow 0.4s ease,
+                fill 0.4s ease,
+                stroke 0.4s ease,
+                opacity 0.4s ease,
+                margin 0.4s ease,
+                padding 0.4s ease !important;
+    transition-delay: 0s !important;
+}
+
+/* Remove the individual transition rules and consolidate */
+html, body, #root, main, section, footer,
+.card, .project-card, .skill-flip-front, .skill-flip-back,
+.minimal-navbar, .contact-card {
+    transition: background-color 0.4s ease,
+                color 0.4s ease,
+                border-color 0.4s ease,
+                box-shadow 0.4s ease;
+}
+
+/* Ensure sections transition smoothly */
+section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    transition: background-color 0.4s ease, 
+                color 0.4s ease, 
+                padding 0.4s ease;
+}
+
+/* Add transitions to Bootstrap containers */
+.container {
+    transition: padding 0.4s ease, margin 0.4s ease;
+}
+
+
 /* Add transitions to theme-dependent elements */
 html[data-theme="dark"] body,
 html[data-theme="dark"] main,
-html[data-theme="dark"] section,
 html[data-theme="dark"] footer {
-    transition: var(--theme-transition);
+    /* transition handled by consolidated rule above */
 }
 
 html[data-theme="dark"] .text-muted,
@@ -116,7 +154,7 @@ html[data-theme="dark"] h6 {
 }
 
 html[data-theme="dark"] .card {
-    transition: var(--theme-transition);
+    /* transition handled by consolidated rule above */
 }
 
 .minimal-navbar {

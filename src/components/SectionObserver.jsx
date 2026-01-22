@@ -14,9 +14,9 @@ const SectionObserver = ({ id, onSectionChange, children }) => {
     }, [inView, id, onSectionChange]);
 
     return (
-        <section id={id} ref={ref}>
+        <div id={id} ref={ref}>
             {children}
-        </section>
+        </div>
     );
 };
 
