@@ -1,8 +1,9 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+    const navigate = useNavigate();
 
     const scrollToProjects = () => {
         const projectsSection = document.getElementById("projects");
@@ -40,6 +41,13 @@ function Home() {
                                     aria-label="View my projects"
                                 >
                                     My Projects
+                                </button>
+                                <button
+                                    onClick={() => navigate('/about')}
+                                    className="btn-sm px-4"
+                                    aria-label="Learn more about me"
+                                >
+                                    About Me
                                 </button>
                                 <button
                                     onClick={() =>

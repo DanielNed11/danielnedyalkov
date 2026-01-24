@@ -1,0 +1,172 @@
+## Introduction
+
+The F1 Management System is a REST API I built using Spring Boot to manage Formula 1 teams, drivers, races, and standings. This project was a deep dive into enterprise-level Java development and RESTful API design.
+
+## Project Goals
+
+I wanted to create a system that could:
+- Manage F1 teams and their drivers
+- Track race results and standings
+- Calculate championship points automatically
+- Provide endpoints for data analysis
+
+## Architecture
+
+### Layered Design
+
+I followed Spring Boot best practices with a clean layered architecture:
+
+```
+┌─────────────────┐
+│  Controller     │  ← REST endpoints
+├─────────────────┤
+│  Service        │  ← Business logic
+├─────────────────┤
+│  Repository     │  ← Data access
+├─────────────────┤
+│  Entity         │  ← Database models
+└─────────────────┘
+```
+
+### Database Schema
+
+PostgreSQL database with normalized tables:
+- **Teams** - Constructor information
+- **Drivers** - Driver profiles and stats
+- **Races** - Grand Prix events
+- **Results** - Race outcomes and points
+- **Standings** - Championship rankings
+
+### Key Features
+
+**1. Team Management**
+```java
+@GetMapping("/teams")
+public List<TeamDTO> getAllTeams() {
+    return teamService.findAll();
+}
+
+@PostMapping("/teams")
+public TeamDTO createTeam(@RequestBody TeamDTO teamDTO) {
+    return teamService.save(teamDTO);
+}
+```
+
+**2. Race Results**
+- Automatically calculate points based on finishing position
+- Update driver and constructor standings
+- Validate race data for consistency
+
+**3. Statistical Endpoints**
+- Top drivers by wins
+- Team performance over a season
+- Head-to-head driver comparisons
+
+## Technical Highlights
+
+### DTOs and Mapping
+
+I used DTOs (Data Transfer Objects) to separate internal entities from API responses, ensuring clean separation of concerns:
+
+```java
+public class TeamDTO {
+    private Long id;
+    private String name;
+    private String country;
+    private List<DriverDTO> drivers;
+    private Integer championshipsWon;
+}
+```
+
+Mapping between entities and DTOs was handled by a custom mapper to keep controllers lean.
+
+### Validation
+
+Spring's validation annotations ensured data integrity:
+
+```java
+@NotBlank(message = "Team name is required")
+private String name;
+
+@Min(value = 1950, message = "Year must be 1950 or later")
+private Integer foundedYear;
+```
+
+### Exception Handling
+
+Global exception handler for consistent error responses:
+
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(
+        ResourceNotFoundException ex
+    ) {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponse(ex.getMessage()));
+    }
+}
+```
+
+## Challenges Faced
+
+### 1. Complex Relationships
+
+Managing bidirectional relationships between teams, drivers, and results required careful JPA configuration to avoid circular references and lazy loading issues.
+
+**Solution**: Used `@JsonIgnore` and DTOs to control serialization.
+
+### 2. Points Calculation Logic
+
+F1 has complex point allocation rules (1st place = 25 points, fastest lap bonus, etc.). I had to implement this as a service layer method that could handle rule changes.
+
+### 3. Data Consistency
+
+Ensuring that updates to race results automatically recalculated standings required transactional integrity and careful service layer design.
+
+## Testing
+
+I wrote comprehensive tests for the service layer:
+- Unit tests with Mockito
+- Integration tests with an in-memory H2 database
+- API endpoint tests with MockMvc
+
+Example test:
+```java
+@Test
+void testCreateTeam_ShouldReturnCreatedTeam() {
+    TeamDTO teamDTO = new TeamDTO("Red Bull Racing", "Austria");
+    when(teamRepository.save(any())).thenReturn(team);
+
+    TeamDTO result = teamService.create(teamDTO);
+
+    assertEquals("Red Bull Racing", result.getName());
+    verify(teamRepository, times(1)).save(any());
+}
+```
+
+## What I Learned
+
+- **Spring Boot ecosystem**: Dependency injection, JPA, validation, and REST
+- **API design**: RESTful principles, proper status codes, and versioning
+- **Database design**: Normalization, indexes, and query optimization
+- **Testing**: Writing maintainable tests for different layers
+- **Project structure**: Organizing a multi-layered enterprise application
+
+## Future Enhancements
+
+- Add authentication and role-based access control
+- Implement caching for frequently accessed data
+- Create scheduled jobs for automated updates from real F1 data sources
+- Add GraphQL support alongside REST
+- Deploy with Docker and CI/CD pipeline
+
+## Conclusion
+
+This project solidified my understanding of backend development with Spring Boot. It taught me how to design scalable APIs, work with relational databases, and follow enterprise development patterns. The experience has been invaluable for my growth as a full-stack developer.
+
+---
+
+**Tech Stack**: Java, Spring Boot, PostgreSQL, JPA/Hibernate, Maven, JUnit, Mockito

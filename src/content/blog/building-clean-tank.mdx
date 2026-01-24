@@ -1,0 +1,86 @@
+## Introduction
+
+Clean Tank is an IoT-based water quality monitoring system I built for aquarium management. The project combines hardware sensors, embedded programming, and a full-stack web application to provide real-time water quality insights.
+
+## The Problem
+
+Maintaining optimal water quality in an aquarium requires constant monitoring of multiple parameters:
+- pH levels
+- Temperature
+- Turbidity (water clarity)
+- Water level
+
+Manual testing is tedious and doesn't provide continuous monitoring. I wanted to build a system that could track these metrics automatically and alert me to any issues.
+
+## System Architecture
+
+### Hardware Layer
+- **Arduino Uno** - Main microcontroller
+- **pH Sensor** - Monitors acidity/alkalinity
+- **Temperature Sensor (DS18B20)** - Tracks water temperature
+- **Turbidity Sensor** - Measures water clarity
+- **Ultrasonic Sensor** - Monitors water level
+
+### Backend Layer
+- **Spring Boot** - REST API for data storage and retrieval
+- **PostgreSQL** - Time-series data storage
+- **Serial Communication** - Arduino-to-computer data transfer
+
+### Frontend Layer
+- **React** - Real-time dashboard
+- **Chart.js** - Data visualization
+- **Bootstrap** - Responsive UI
+
+## Key Challenges
+
+### 1. Sensor Calibration
+Each sensor required precise calibration to ensure accurate readings. I had to develop calibration algorithms that accounted for environmental factors like ambient temperature affecting pH readings.
+
+### 2. Data Reliability
+Sensors occasionally produced noisy or invalid data. I implemented a moving average filter in the Arduino code to smooth out readings and discard outliers.
+
+```cpp
+float getFilteredReading(float newReading, float* readings, int size) {
+    float sum = 0;
+    for (int i = size - 1; i > 0; i--) {
+        readings[i] = readings[i - 1];
+        sum += readings[i];
+    }
+    readings[0] = newReading;
+    sum += newReading;
+    return sum / size;
+}
+```
+
+### 3. Serial Communication
+Establishing reliable communication between Arduino and the Spring Boot backend was tricky. I used a Python bridge script to read serial data and forward it to the API via HTTP requests.
+
+## Results
+
+The system successfully monitors water quality 24/7 and has helped me maintain a healthier aquarium environment. Key achievements:
+- Real-time monitoring with 5-second update intervals
+- Historical data tracking and trend analysis
+- Automated alerts when parameters go out of range
+- 99% uptime over 3 months of testing
+
+## What I Learned
+
+- **Hardware-Software Integration**: Bridging physical sensors with web applications
+- **Data Processing**: Implementing filtering algorithms for noisy sensor data
+- **System Design**: Building a full-stack IoT solution from scratch
+- **Debugging**: Troubleshooting issues across hardware, embedded code, backend, and frontend
+
+## Future Improvements
+
+- Add automated water change system
+- Implement machine learning to predict maintenance needs
+- Build a mobile app for remote monitoring
+- Add support for multiple tanks
+
+## Conclusion
+
+Clean Tank demonstrates how IoT technology can solve real-world problems. This project deepened my understanding of embedded systems, full-stack development, and system integration. It's one of my favorite projects because it combines multiple technical domains into a practical solution.
+
+---
+
+**Tech Stack**: Arduino, C++, Python, Spring Boot, PostgreSQL, React, Bootstrap

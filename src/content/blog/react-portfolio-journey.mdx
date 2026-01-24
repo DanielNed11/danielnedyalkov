@@ -1,0 +1,182 @@
+## Introduction
+
+Building a portfolio website is a rite of passage for developers. After several iterations and false starts, I finally created a portfolio I'm proud of using React, Bootstrap, and Vite. Here's what I learned along the way.
+
+## Why React?
+
+I chose React for several reasons:
+- **Component reusability** - Build once, use everywhere
+- **Modern tooling** - Vite provides lightning-fast development
+- **Flexibility** - Full control over design and functionality
+- **Learning opportunity** - Deepen my frontend skills
+
+## Design Philosophy
+
+### Keep It Simple
+
+I've seen portfolios that are visual masterpieces but impossible to navigate. My priority was:
+1. **Clarity** - Make it obvious what I do
+2. **Speed** - Fast loading times
+3. **Accessibility** - Keyboard navigation, screen reader support
+4. **Responsiveness** - Perfect on mobile and desktop
+
+### Dark Mode First
+
+I designed for dark mode from the start, then adapted for light mode. Dark mode is easier on the eyes and popular with developers (my target audience).
+
+## Technical Decisions
+
+### 1. Vite Over Create React App
+
+Vite offers:
+- Instant server start
+- Lightning-fast HMR (Hot Module Replacement)
+- Optimized builds
+- Better developer experience
+
+Setup was simple:
+```bash
+npm create vite@latest portfolio -- --template react
+```
+
+### 2. Bootstrap for Rapid Prototyping
+
+Bootstrap accelerated development:
+- Responsive grid system out of the box
+- Pre-built components (cards, buttons, navbar)
+- Consistent spacing and typography
+
+I customized Bootstrap variables to match my color scheme and removed unused components to keep the bundle size down.
+
+### 3. CSS Custom Properties for Theming
+
+Theme switching is powered by CSS custom properties:
+
+```css
+[data-theme="dark"] {
+    --bg-color: #1a171e;
+    --text-color: #e8e8e8;
+    --primary-color: #9378bc;
+}
+
+[data-theme="light"] {
+    --bg-color: #fdfffd;
+    --text-color: #2a2a2a;
+    --primary-color: #4a9d7a;
+}
+```
+
+JavaScript toggles the `data-theme` attribute:
+```javascript
+document.documentElement.setAttribute('data-theme', theme);
+```
+
+## Key Features
+
+### 1. Project Showcase
+
+Each project card includes:
+- **Title and description**
+- **Tech stack badges**
+- **Live demo and GitHub links**
+- **Expandable details** (challenges, solutions, outcomes)
+
+Cards are clickable, accessible, and visually engaging.
+
+### 2. Skills Section with Flip Cards
+
+Interactive skill cards flip on click to reveal:
+- Description of my proficiency
+- Projects where I used the technology
+
+Built with pure CSS transforms:
+```css
+.skill-flip-card.flipped .skill-flip-inner {
+    transform: rotateY(180deg);
+}
+```
+
+### 3. Smooth Scroll Navigation
+
+Used Intersection Observer API to:
+- Highlight active section in navbar
+- Trigger scroll-based animations
+- Lazy load images for performance
+
+### 4. Performance Optimizations
+
+- **Image optimization** - Compressed PNGs/JPEGs with vite-plugin-image-optimizer
+- **Code splitting** - Lazy load components with React.lazy()
+- **Minification** - Vite handles this automatically
+- **Hosting** - Deployed to GitHub Pages with custom domain
+
+Result: **Lighthouse score of 95+** across all metrics.
+
+## Challenges and Solutions
+
+### Challenge 1: Theme Persistence
+
+**Problem**: Theme resets on page reload.
+
+**Solution**: Store preference in localStorage:
+```javascript
+const savedTheme = localStorage.getItem('theme') || 'dark';
+setTheme(savedTheme);
+```
+
+### Challenge 2: Smooth Scroll on iOS
+
+**Problem**: Smooth scrolling didn't work on iOS Safari.
+
+**Solution**: Used `scrollIntoView({ behavior: 'smooth' })` with a polyfill fallback.
+
+### Challenge 3: Build Path Issues
+
+**Problem**: Assets didn't load on GitHub Pages due to incorrect base path.
+
+**Solution**: Configure Vite's base path:
+```javascript
+base: process.env.GITHUB_PAGES ? "/Portfolio/" : "/"
+```
+
+## Lessons Learned
+
+### 1. Design Tokens Are Essential
+
+Defining colors, spacing, and typography as CSS variables upfront made theming and consistency trivial.
+
+### 2. Accessibility Matters
+
+Adding ARIA labels, focus states, and keyboard navigation took extra time but made the site usable for everyone.
+
+### 3. Less Is More
+
+I removed fancy animations that didn't add value. Subtle transitions are more professional.
+
+### 4. Mobile First Works
+
+Designing for mobile first, then scaling up, resulted in a better responsive experience than the reverse.
+
+## What's Next?
+
+Future improvements I'm planning:
+- **Blog section** - Share what I'm learning (you're reading this now!)
+- **Analytics** - Track visitor behavior with privacy-friendly tools
+- **CMS integration** - Make content updates easier
+- **Automated testing** - Add E2E tests with Playwright
+
+## Conclusion
+
+Building this portfolio taught me more than any tutorial could. I learned to make design decisions, optimize for performance, and prioritize user experience. Most importantly, I now have a platform to showcase my work and share my journey as a developer.
+
+If you're building your own portfolio, my advice:
+- **Start simple** - Ship a basic version first
+- **Iterate** - Improve based on feedback
+- **Make it yours** - Don't copy templates blindly
+- **Have fun** - It's your creative space!
+
+---
+
+**Tech Stack**: React, Vite, Bootstrap, CSS, JavaScript, GitHub Pages
+
+**View Source**: [GitHub Repository](https://github.com/DanielNed11/Portfolio)
