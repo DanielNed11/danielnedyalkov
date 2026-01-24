@@ -26,15 +26,21 @@ function ThemeToggle() {
     };
 
     return (
-        <div className="theme-toggle" onClick={toggleTheme}>
+        <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            type="button"
+        >
             <div className="toggle-circle">
                 {theme === "light" ? (
-                    <FiSun size={16} color="#f5c542" strokeWidth={2.2} />
+                    <FiSun size={16} color="#f5c542" strokeWidth={2.2} aria-hidden="true" />
                 ) : (
-                    <FiMoon size={16} color="#d4d4d4" strokeWidth={2.2} />
+                    <FiMoon size={16} color="#d4d4d4" strokeWidth={2.2} aria-hidden="true" />
                 )}
             </div>
-        </div>
+        </button>
     );
 }
 

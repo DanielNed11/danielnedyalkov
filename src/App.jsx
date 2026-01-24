@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { Container } from "react-bootstrap";
 import NavigationBar from "./components/Navbar";
-import SectionObserver from "./components/SectionObserver"; // Import SectionObserver
+import SectionObserver from "./components/SectionObserver";
+import BackToTop from "./components/BackToTop";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Journey from "./pages/Journey";
@@ -18,8 +19,11 @@ function App() {
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <a href="#main-content" className="skip-link">
+                Skip to main content
+            </a>
             <NavigationBar activeSection={activeSection} />
-            <main style={{ flex: 1, transition: 'background-color 0.4s ease, color 0.4s ease' }}>
+            <main id="main-content" style={{ flex: 1, transition: 'background-color 0.4s ease, color 0.4s ease' }}>
                 <SectionObserver id="home" onSectionChange={handleSectionChange}>
                     <Home />
                 </SectionObserver>
@@ -48,6 +52,7 @@ function App() {
                     </p>
                 </Container>
             </footer>
+            <BackToTop />
         </div>
     );
 }

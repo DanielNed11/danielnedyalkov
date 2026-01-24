@@ -69,6 +69,17 @@ html, body, #root {
     background: var(--bg);
     color: var(--text);
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+    position: relative;
 }
 
 section {
@@ -159,4 +170,73 @@ html[data-theme="dark"] .card {
 
 .minimal-navbar {
     transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* ===== ACCESSIBILITY ===== */
+/* Skip to main content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
+    z-index: 10000;
+    font-weight: 600;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid var(--accent-hover);
+    outline-offset: 2px;
+}
+
+/* Focus-visible styles for better keyboard navigation */
+*:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Remove default focus for mouse users */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Ensure interactive elements have visible focus states */
+.btn:focus-visible,
+.nav-link:focus-visible,
+.card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(74, 157, 122, 0.2);
+}
+
+[data-theme="dark"] .btn:focus-visible,
+[data-theme="dark"] .nav-link:focus-visible,
+[data-theme="dark"] .card:focus-visible {
+    box-shadow: 0 0 0 4px rgba(147, 120, 188, 0.2);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

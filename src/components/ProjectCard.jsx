@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Badge } from "react-bootstrap";
 import placeholder from "../assets/placeholder.png";
 
@@ -10,7 +10,10 @@ function ProjectCard({
                          isFinished,
                          github,
                          status = "development",
+                         longDescription,
                      }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+
     const handleImageError = (e) => {
         e.target.src = placeholder;
     };
@@ -49,9 +52,21 @@ function ProjectCard({
 
                     <Card.Body className="d-flex flex-column p-4">
                         <Card.Title className="h4 fw-bold mb-3 text-center">{title}</Card.Title>
-                        <Card.Text className="flex-grow-1 text-muted mb-4 text-center">
-                            {description}
+                        <Card.Text className="text-muted mb-2 text-center">
+                            {isExpanded && longDescription ? longDescription : description}
                         </Card.Text>
+
+                        {longDescription && (
+                            <button
+                                onClick={() => setIsExpanded(!isExpanded)}
+                                className="btn btn-link btn-sm p-0 mb-3 text-decoration-none"
+                                style={{ alignSelf: 'center' }}
+                                aria-label={isExpanded ? `Show less about ${title}` : `Read more about ${title}`}
+                                aria-expanded={isExpanded}
+                            >
+                                {isExpanded ? '← Show Less' : 'Read More →'}
+                            </button>
+                        )}
 
                         <div className="mb-4">
                             <div className="d-flex flex-wrap gap-2 justify-content-center">
@@ -69,7 +84,8 @@ function ProjectCard({
                                     href={github}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn w-100 "
+                                    className="btn w-100"
+                                    aria-label={`View ${title} on GitHub`}
                                 >
                                     View on GitHub
                                 </a>
@@ -77,6 +93,7 @@ function ProjectCard({
                                 <button
                                     disabled
                                     className="btn w-100 btn-disabled"
+                                    aria-label={`${title} coming soon`}
                                 >
                                     Coming Soon
                                 </button>

@@ -1,7 +1,9 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
+
 function Home() {
+
     const scrollToProjects = () => {
         const projectsSection = document.getElementById("projects");
         if (projectsSection) {
@@ -10,8 +12,9 @@ function Home() {
     };
 
     return (
-        <section className="min-vh-100 d-flex align-items-center hero-section">
-            <Container>
+        <section className="min-vh-100 d-flex align-items-center hero-section" style={{ position: 'relative' }}>
+
+            <Container style={{ position: 'relative', zIndex: 1 }}>
                 <Row className="justify-content-center text-center">
                     <Col lg={8} xl={6}>
                         <div>
@@ -34,6 +37,7 @@ function Home() {
                                 <button
                                     onClick={scrollToProjects}
                                     className="btn-sm px-4"
+                                    aria-label="View my projects"
                                 >
                                     My Projects
                                 </button>
@@ -44,6 +48,7 @@ function Home() {
                                             ?.scrollIntoView({ behavior: "smooth" })
                                     }
                                     className="btn-sm px-4"
+                                    aria-label="Go to contact section"
                                 >
                                     Get In Touch
                                 </button>

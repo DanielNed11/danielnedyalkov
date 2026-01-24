@@ -1,3 +1,23 @@
+/* ===== ABOUT CONTENT CARD ===== */
+.about-content-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(74, 157, 122, 0.1);
+    transition: all 0.3s ease;
+}
+
+.about-content-card:hover {
+    box-shadow: 0 8px 24px rgba(74, 157, 122, 0.12);
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .about-content-card {
+    border-color: rgba(147, 120, 188, 0.1);
+}
+
+[data-theme="dark"] .about-content-card:hover {
+    box-shadow: 0 8px 24px rgba(147, 120, 188, 0.15);
+}
+
 /* ===== SKILLS SECTION ===== */
 .skill-section {
     margin-bottom: 4rem;

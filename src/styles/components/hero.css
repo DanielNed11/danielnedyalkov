@@ -2,6 +2,14 @@
 .hero-section {
     position: relative;
     overflow: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+/* Prevent horizontal overflow from particles */
+#tsparticles {
+    max-width: 100vw;
+    overflow: hidden;
 }
 
 /* ===== TEXT STYLES ===== */
@@ -45,6 +53,9 @@
     display: inline-block;
     font-weight: 900;
     letter-spacing: -0.02em;
+    will-change: background-position;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 @keyframes gradient-flow {

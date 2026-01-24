@@ -5,7 +5,6 @@ import placeholder from "./assets/placeholder.png";
 import javaFundCert from "./assets/Programming Fundamentals with Java - May 2023 - Certificate.pdf";
 import javaAdvCert from "./assets/Java Advanced - September 2023 - Certificate.pdf";
 import javaOopCert from "./assets/Java OOP - October 2023 - Certificate.pdf";
-// Note: Daniel Nedyalkov CV.pdf is usually for the About/Resume section, but could be listed here if it was a specific milestone.
 
 export const projects = [
     {
@@ -66,7 +65,8 @@ export const journey = [
         subtitle: "Software University (SoftUni)",
         description: "Mastered the core concepts of programming, including loops, arrays, methods, and basic data structures in Java.",
         type: "education",
-        certificate: javaFundCert
+        certificate: javaFundCert,
+        skills: ["Java Basics", "Data Structures", "Algorithms", "Problem Solving"]
     },
     {
         id: 2,
@@ -75,7 +75,8 @@ export const journey = [
         subtitle: "Software University (SoftUni)",
         description: "Deepened knowledge in Java with streams, stacks, queues, multidimensional arrays, and functional programming concepts.",
         type: "education",
-        certificate: javaAdvCert
+        certificate: javaAdvCert,
+        skills: ["Java Streams", "Functional Programming", "Collections", "Generics"]
     },
     {
         id: 3,
@@ -84,15 +85,17 @@ export const journey = [
         subtitle: "Software University (SoftUni)",
         description: "Learned Object-Oriented Programming principles: Encapsulation, Inheritance, Abstraction, and Polymorphism, along with Design Patterns.",
         type: "education",
-        certificate: javaOopCert
+        certificate: javaOopCert,
+        skills: ["OOP Principles", "Design Patterns", "SOLID", "Refactoring"]
     },
     {
         id: 4,
         date: "Present",
         title: "Applied Computer Science",
-        subtitle: "University",
+        subtitle: "Karel de Grote University",
         description: "Currently a second-year student focusing on full-stack development, IoT, and embedded systems.",
         type: "education",
-        certificate: null
+        certificate: null,
+        skills: ["Full-Stack Dev", "IoT", "Embedded Systems", "Software Engineering"]
     }
 ];

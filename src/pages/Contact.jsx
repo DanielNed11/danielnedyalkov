@@ -1,7 +1,7 @@
-import React from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
-import { FaGithub, FaLinkedin, FaDownload } from "react-icons/fa6";
-import { MdEmail} from "react-icons/md";
+import React, { useState } from "react";
+import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { FaGithub, FaLinkedin, FaDownload, FaPaperPlane } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
 import cvFile from "../assets/Daniel Nedyalkov CV.pdf";
 
 const contactInfo = [
@@ -28,6 +28,45 @@ const contactInfo = [
 ];
 
 function Contact() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    const [formStatus, setFormStatus] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setFormStatus('sending');
+
+        try {
+            const response = await fetch('https://formspree.io/f/xlgjglll', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                setFormStatus('success');
+                setFormData({ name: '', email: '', message: '' });
+                setTimeout(() => setFormStatus(''), 5000);
+            } else {
+                setFormStatus('error');
+            }
+        } catch (error) {
+            setFormStatus('error, ' + error.message);
+        }
+    };
+
     return (
             <section className="p-0">
                 <Container>
@@ -61,6 +100,78 @@ function Contact() {
                         ))}
                     </Row>
 
+
+                    <Row className="justify-content-center mb-5">
+                        <Col lg={8}>
+                            <Card className="border-0 shadow-sm">
+                                <Card.Body className="p-4">
+                                    <h3 className="fw-bold mb-4 text-center">Send Me a Message</h3>
+                                    <Form onSubmit={handleSubmit}>
+                                        <Form.Group className="mb-3" controlId="formName">
+                                            <Form.Label>Name</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                placeholder="Your name"
+                                                required
+                                            />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3" controlId="formEmail">
+                                            <Form.Label>Email</Form.Label>
+                                            <Form.Control
+                                                type="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                placeholder="your.email@example.com"
+                                                required
+                                            />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3" controlId="formMessage">
+                                            <Form.Label>Message</Form.Label>
+                                            <Form.Control
+                                                as="textarea"
+                                                name="message"
+                                                value={formData.message}
+                                                onChange={handleChange}
+                                                rows={5}
+                                                placeholder="Your message..."
+                                                required
+                                            />
+                                        </Form.Group>
+
+                                        {formStatus === 'success' && (
+                                            <div className="alert alert-success" role="alert">
+                                                Message sent successfully! I'll get back to you soon.
+                                            </div>
+                                        )}
+
+                                        {formStatus === 'error' && (
+                                            <div className="alert alert-danger" role="alert">
+                                                Oops! Something went wrong. Please try again.
+                                            </div>
+                                        )}
+
+                                        <div className="text-center">
+                                            <button
+                                                type="submit"
+                                                disabled={formStatus === 'sending'}
+                                                className="btn-sm px-4"
+                                                style={{ opacity: formStatus === 'sending' ? 0.6 : 1 }}
+                                            >
+                                                <FaPaperPlane className="me-2" />
+                                                {formStatus === 'sending' ? 'Sending...' : 'Send Message'}
+                                            </button>
+                                        </div>
+                                    </Form>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
 
                     <Row className="justify-content-center mb-5">
                         <Col className="text-center">

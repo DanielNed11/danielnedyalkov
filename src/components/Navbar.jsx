@@ -39,19 +39,32 @@ function NavigationBar({ activeSection }) { // Accept activeSection as prop
     }, []); // Empty dependency array as it doesn't depend on component state for section tracking
 
     return (
-        <nav className="minimal-navbar">
+        <nav className="minimal-navbar" role="navigation" aria-label="Main navigation">
             <div className="navbar-content">
-                <button className={`hamburger ${menuOpen ? 'active' : ''}`} onClick={() => setMenuOpen(!menuOpen)}></button>
-                <div className={`nav-links ${menuOpen ? 'show' : ''}`}>
+                <button
+                    className={`hamburger ${menuOpen ? 'active' : ''}`}
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={menuOpen}
+                    aria-controls="nav-menu"
+                ></button>
+                <div
+                    id="nav-menu"
+                    className={`nav-links ${menuOpen ? 'show' : ''}`}
+                    role="menu"
+                >
                     {navItems.map((item) => (
                         <a
                             key={item.id}
-                            href={`#${item.id}`} // Add href attribute
+                            href={`#${item.id}`}
                             onClick={(e) => {
-                                e.preventDefault(); // Prevent default anchor behavior
+                                e.preventDefault();
                                 scrollTo(item.id);
                             }}
                             className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                            role="menuitem"
+                            aria-label={`Navigate to ${item.label}`}
+                            aria-current={activeSection === item.id ? 'page' : undefined}
                         >
                             {item.label}
                         </a>

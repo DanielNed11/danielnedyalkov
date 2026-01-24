@@ -1,0 +1,96 @@
+.learning-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(74, 157, 122, 0.2) !important;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.learning-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--accent-hover));
+    transition: width 0.3s ease;
+}
+
+.learning-card:hover::before {
+    width: 8px;
+}
+
+.learning-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(74, 157, 122, 0.15);
+    border-color: var(--accent) !important;
+}
+
+[data-theme="dark"] .learning-card {
+    border-color: rgba(147, 120, 188, 0.2) !important;
+}
+
+[data-theme="dark"] .learning-card:hover {
+    box-shadow: 0 8px 24px rgba(147, 120, 188, 0.2);
+    border-color: var(--accent) !important;
+}
+
+.learning-card h4 {
+    color: var(--accent);
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.learning-card h4::before {
+    content: '📚';
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.learning-card:nth-child(1) h4::before { content: '🚀'; }
+.learning-card:nth-child(2) h4::before { content: '⚛️'; }
+.learning-card:nth-child(3) h4::before { content: '🗄️'; }
+.learning-card:nth-child(4) h4::before { content: '📊'; }
+
+.learning-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Animation for when section comes into view */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.learning-card {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.learning-card:nth-child(1) { animation-delay: 0.1s; }
+.learning-card:nth-child(2) { animation-delay: 0.2s; }
+.learning-card:nth-child(3) { animation-delay: 0.3s; }
+.learning-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .learning-card {
+        animation: none;
+    }
+
+    .learning-card:hover {
+        transform: none;
+    }
+}
