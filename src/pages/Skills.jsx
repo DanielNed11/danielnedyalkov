@@ -306,8 +306,8 @@ function Skills() {
                                         <img
                                             src={
                                                 currentTheme === 'dark'
-                                                    ? "https://github-readme-stats.vercel.app/api?username=DanielNed11&show_icons=true&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&icon_color=9378bc&text_color=e8e8e8"
-                                                    : "https://github-readme-stats.vercel.app/api?username=DanielNed11&show_icons=true&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&icon_color=4a9d7a&text_color=2a2a2a"
+                                                    ? "https://github-readme-stats-smoky-mu-34.vercel.app/api?username=DanielNed11&show_icons=true&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&icon_color=9378bc&text_color=e8e8e8"
+                                                    : "https://github-readme-stats-smoky-mu-34.vercel.app/api?username=DanielNed11&show_icons=true&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&icon_color=4a9d7a&text_color=2a2a2a"
                                             }
                                             alt="GitHub Stats"
                                             className="img-fluid rounded shadow-sm"
@@ -321,8 +321,8 @@ function Skills() {
                                         <img
                                             src={
                                                 currentTheme === 'dark'
-                                                    ? "https://github-readme-stats.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&text_color=e8e8e8"
-                                                    : "https://github-readme-stats.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&text_color=2a2a2a"
+                                                    ? "https://github-readme-stats-smoky-mu-34.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&text_color=e8e8e8"
+                                                    : "https://github-readme-stats-smoky-mu-34.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&text_color=2a2a2a"
                                             }
                                             alt="Top Languages"
                                             className="img-fluid rounded shadow-sm"
