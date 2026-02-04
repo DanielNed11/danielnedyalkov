@@ -1,86 +1,250 @@
+---
+title: "Building Clean Tank: IoT Water Quality Monitoring"
+date: "2025-12-15"
+excerpt: "How I built an IoT system to monitor aquarium water quality using Arduino, sensors, and Spring Boot."
+tags: ["Full-Stack", "IoT", "Arduino", "Spring Boot", "C++", "Python", "JavaScript", "JPA"]
+readTime: "4 min read"
+---
+
 ## Introduction
 
-Clean Tank is an IoT-based water quality monitoring system I built for aquarium management. The project combines hardware sensors, embedded programming, and a full-stack web application to provide real-time water quality insights.
+Clean Tank is a production-ready IoT aquarium management platform that combines Arduino-based sensors with a Spring Boot web application to provide real-time water quality monitoring, intelligent alerts, and multi-user support with subscription tiers.
 
 ## The Problem
 
-Maintaining optimal water quality in an aquarium requires constant monitoring of multiple parameters:
-- pH levels
-- Temperature
-- Turbidity (water clarity)
-- Water level
+Maintaining optimal water quality in an aquarium is critical for fish health, but manual testing has several limitations:
+- **Time-consuming**: Testing pH, temperature, and TDS manually takes 10-15 minutes
+- **No continuous monitoring**: You only know water quality at specific testing moments
+- **Species-specific requirements**: Different fish have different safe ranges that need to be tracked
+- **No historical trends**: Hard to identify patterns or predict maintenance needs
 
-Manual testing is tedious and doesn't provide continuous monitoring. I wanted to build a system that could track these metrics automatically and alert me to any issues.
+I wanted to build a complete platform that could monitor multiple aquariums 24/7, aggregate safe ranges for different fish species, and provide intelligent alerts when parameters drift out of range.
 
 ## System Architecture
 
 ### Hardware Layer
-- **Arduino Uno** - Main microcontroller
-- **pH Sensor** - Monitors acidity/alkalinity
-- **Temperature Sensor (DS18B20)** - Tracks water temperature
-- **Turbidity Sensor** - Measures water clarity
-- **Ultrasonic Sensor** - Monitors water level
+- **Arduino with ESP8266 WiFi Module** - Wireless sensor platform
+- **pH Sensor** - Monitors acidity/alkalinity (0-14 scale)
+- **DS18B20 Temperature Sensor** - Tracks water temperature (°C)
+- **TDS Sensor** - Measures Total Dissolved Solids (ppm)
+- **MAC Address Identification** - Each device uniquely identified (e.g., AA:BB:CC:DD:EE:01)
 
-### Backend Layer
-- **Spring Boot** - REST API for data storage and retrieval
-- **PostgreSQL** - Time-series data storage
-- **Serial Communication** - Arduino-to-computer data transfer
+The Arduino connects directly to WiFi and sends HTTP POST requests with JSON payloads to the Spring Boot API:
 
-### Frontend Layer
-- **React** - Real-time dashboard
-- **Chart.js** - Data visualization
-- **Bootstrap** - Responsive UI
-
-## Key Challenges
-
-### 1. Sensor Calibration
-Each sensor required precise calibration to ensure accurate readings. I had to develop calibration algorithms that accounted for environmental factors like ambient temperature affecting pH readings.
-
-### 2. Data Reliability
-Sensors occasionally produced noisy or invalid data. I implemented a moving average filter in the Arduino code to smooth out readings and discard outliers.
-
-```cpp
-float getFilteredReading(float newReading, float* readings, int size) {
-    float sum = 0;
-    for (int i = size - 1; i > 0; i--) {
-        readings[i] = readings[i - 1];
-        sum += readings[i];
-    }
-    readings[0] = newReading;
-    sum += newReading;
-    return sum / size;
+```json
+{
+  "mac": "AA:BB:CC:DD:EE:01",
+  "sensorType": "TEMPERATURE",
+  "value": 24.5,
+  "timestamp": "2024-02-04T10:30:00"
 }
 ```
 
-### 3. Serial Communication
-Establishing reliable communication between Arduino and the Spring Boot backend was tricky. I used a Python bridge script to read serial data and forward it to the API via HTTP requests.
+### Backend Layer - Spring Boot 3.5.6 (Java 21)
+- **REST API** (`/api/sensor-data`) - Receives sensor readings from Arduino devices
+- **PostgreSQL Database** - 14 tables with indexed time-series data
+- **Service Layer Architecture**:
+  - `SensorDataService` - Processes incoming readings, validates against safe ranges
+  - `WaterQualityService` - Calculates overall aquarium status (OPTIMAL/ATTENTION/BAD)
+  - `NotificationService` - Sends email alerts (rate-limited to 1/hour per sensor)
+  - `ToleranceStrategyFactory` - Smart tolerance calculations using Strategy pattern
+  - `SubscriptionService` - Enforces tier limits and feature access
+
+### Frontend Layer
+- **Thymeleaf Templates** - Server-side rendered pages
+- **Bootstrap 5.3** - Responsive UI framework
+- **Chart.js** - Interactive time-series visualizations
+- **Custom JavaScript Modules** - Lazy-loaded chart data with 24h/7d/30d/all time ranges
+
+### Deployment
+- **RedHat Server** running at `10.134.178.152:80`
+- **Gmail SMTP Integration** - HTML email alerts for MAX tier subscribers
+
+## Key Technical Challenges
+
+### 1. Smart Tolerance Strategies
+
+Different sensors require different tolerance calculations. I implemented the **Strategy Pattern** to handle this elegantly:
+
+**Temperature**: Percentage-based with absolute minimum
+```java
+// 10% tolerance + minimum 1°C buffer
+tolerance = Math.max(safeRange * 0.10, 1.0);
+```
+
+**pH**: Fixed tolerance (water chemistry requires precision)
+```java
+// Fixed 0.5 pH unit tolerance
+tolerance = 0.5;
+```
+
+**TDS**: Percentage-based with absolute minimum
+```java
+// 10% tolerance + minimum 20ppm buffer
+tolerance = Math.max(safeRange * 0.10, 20.0);
+```
+
+### 2. Multi-Species Safe Range Aggregation
+
+When an aquarium contains multiple fish species (e.g., Goldfish + Guppy), each has different safe ranges. The system **averages** all species requirements to find optimal conditions:
+
+```java
+// Average min/max across all fish species in the aquarium
+avgMin = (goldfishMin + guppyMin) / 2;
+avgMax = (goldfishMax + guppyMax) / 2;
+```
+
+This creates a "compromise zone" that keeps all fish healthy.
+
+### 3. Device Registration Flow
+
+**First-time connection**:
+1. Arduino POSTs sensor data with MAC address
+2. Backend auto-creates `"Unknown Device {MAC}"` entry
+3. User logs in and registers device with custom name
+4. System links aquarium to user account via `user_aquariums` join table
+
+**Security**: Only users with explicit aquarium access can view sensor data for that device.
+
+### 4. Rate-Limited Notifications
+
+To prevent email spam, the system enforces **1 alert per hour per user/sensor/aquarium combination**:
+
+```java
+// Check last notification time
+Duration timeSinceLastAlert = Duration.between(lastNotificationTime, now);
+if (timeSinceLastAlert.toHours() >= 1) {
+    sendEmailAlert();
+}
+```
+
+This prevents users from getting flooded with emails during extended out-of-range periods.
+
+### 5. Concurrent Sensor Reads
+
+Multiple Arduino devices can POST simultaneously. I used **optimistic locking** and **indexed queries** to handle race conditions:
+
+```sql
+CREATE INDEX idx_sensor_readings_arduino_recorded
+ON sensor_readings(arduino_id, recorded_at DESC);
+```
+
+## Database Design Highlights
+
+**14 interconnected tables**:
+- `sensor_readings` - Time-series data with composite index
+- `aquariums` - Device metadata with MAC addresses
+- `user_aquariums` - Many-to-many user ↔ device mapping
+- `fish_safe_ranges` - Species requirements (M2M with aquariums)
+- `safe_ranges` - Reference data (min/max per sensor per species)
+- `notifications` - Alert history with timestamps
+- `subscriptions` - Tier management (Basic/Premium/Max)
+- `products`, `orders`, `order_items` - E-commerce functionality
+
+**Key relationships**:
+- Users can own multiple aquariums (subscription tier enforced)
+- Aquariums can have multiple fish species
+- Each fish species has 3 safe ranges (Temperature, pH, TDS)
+
+## Subscription System
+
+Three tiers with different capabilities:
+
+<table>
+  <thead>
+    <tr>
+      <th>Tier</th>
+      <th>Aquariums</th>
+      <th>Data Retention</th>
+      <th>Email Alerts</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Basic</strong></td>
+      <td>1</td>
+      <td>7 days</td>
+      <td>❌</td>
+      <td>Free</td>
+    </tr>
+    <tr>
+      <td><strong>Premium</strong></td>
+      <td>5</td>
+      <td>90 days</td>
+      <td>❌</td>
+      <td>$19.99/mo</td>
+    </tr>
+    <tr>
+      <td><strong>Max</strong></td>
+      <td>99</td>
+      <td>365 days</td>
+      <td>✅</td>
+      <td>$49.99/mo</td>
+    </tr>
+  </tbody>
+</table>
+
+The backend enforces these limits:
+```java
+if (userAquariumCount >= subscription.getMaxAquariums()) {
+    throw new SubscriptionLimitException();
+}
+```
 
 ## Results
 
-The system successfully monitors water quality 24/7 and has helped me maintain a healthier aquarium environment. Key achievements:
-- Real-time monitoring with 5-second update intervals
-- Historical data tracking and trend analysis
-- Automated alerts when parameters go out of range
-- 99% uptime over 3 months of testing
+The platform has been successfully deployed and tested:
+- **Real-time monitoring**: Sensor data displayed within seconds of Arduino POST
+- **Intelligent status**: Three-level system (OPTIMAL/ATTENTION/BAD) based on aggregated fish requirements
+- **Data visualization**: Interactive charts with 24h/7d/30d/all time ranges
+- **Email alerts**: HTML notifications with current value, safe range, and aquarium name
+- **Multi-user support**: Secure per-user aquarium access with role-based permissions
+- **Scalable**: Indexed queries handle thousands of sensor readings efficiently
 
 ## What I Learned
 
-- **Hardware-Software Integration**: Bridging physical sensors with web applications
-- **Data Processing**: Implementing filtering algorithms for noisy sensor data
-- **System Design**: Building a full-stack IoT solution from scratch
-- **Debugging**: Troubleshooting issues across hardware, embedded code, backend, and frontend
+### Technical Skills
+- **IoT Communication Protocols**: HTTP-based sensor data transmission over WiFi
+- **Design Patterns**: Strategy (tolerance), Factory (strategy creation), Repository (data access)
+- **Concurrent Programming**: Handling simultaneous sensor readings with proper indexing
+- **Time-Series Data**: Efficient storage and retrieval of sensor readings
+- **Email Integration**: SMTP configuration and HTML template generation
+
+### System Design
+- **Layered Architecture**: Clean separation between controller, service, repository layers
+- **Feature Flags**: Subscription-based feature toggling (alerts, aquarium limits)
+- **Rate Limiting**: Preventing notification spam while maintaining responsiveness
+- **Data Aggregation**: Averaging fish requirements to support mixed-species tanks
+
+### Full-Stack Development
+- **Backend**: Spring Boot, JPA/Hibernate, PostgreSQL, RESTful APIs
+- **Frontend**: Thymeleaf, Bootstrap, Chart.js, asynchronous data loading
+- **DevOps**: RedHat server deployment, database migrations, SMTP configuration
 
 ## Future Improvements
 
-- Add automated water change system
-- Implement machine learning to predict maintenance needs
-- Build a mobile app for remote monitoring
-- Add support for multiple tanks
+- **Mobile App**: Native iOS/Android app for remote monitoring
+- **Predictive Analytics**: Machine learning to predict when water changes are needed
+- **Automated Dosing**: Integration with dosing pumps for pH/mineral adjustment
+- **Community Features**: Share aquarium setups and fish compatibility data
+- **WebSocket Support**: Real-time dashboard updates without polling
+- **Arduino OTA Updates**: Over-the-air firmware updates for sensors
 
 ## Conclusion
 
-Clean Tank demonstrates how IoT technology can solve real-world problems. This project deepened my understanding of embedded systems, full-stack development, and system integration. It's one of my favorite projects because it combines multiple technical domains into a practical solution.
+Clean Tank evolved from a simple sensor project into a production-ready SaaS platform. It demonstrates:
+- **Full-stack IoT development** from hardware to web application
+- **Real-world system design** with subscriptions, multi-tenancy, and feature tiers
+- **Production considerations** like rate limiting, data retention policies, and concurrent access
+- **Business logic complexity** with species-specific requirements and intelligent aggregation
+
+The project showcases how modern IoT solutions require expertise across embedded systems, backend engineering, database design, and frontend development. It's one of my most comprehensive projects, combining multiple technical domains into a practical, scalable solution.
 
 ---
 
-**Tech Stack**: Arduino, C++, Python, Spring Boot, PostgreSQL, React, Bootstrap
+**Tech Stack**: Arduino, ESP8266, C++, Java 21, Spring Boot 3.5.6, PostgreSQL, Thymeleaf, Bootstrap 5.3, Chart.js, Gmail SMTP
+
+**Deployment**: RedHat Server (10.134.178.152:80)
+
+**Repository**: [github.com/DanielNed11/CleanTank](https://github.com/DanielNed11/CleanTank)

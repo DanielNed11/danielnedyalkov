@@ -1,172 +1,452 @@
+---
+title: "F1 Management System: From ArrayList to Spring Data JPA"
+date: "2025-11-20"
+excerpt: "Building a full-stack Spring Boot web application with four different persistence strategies - an educational journey through enterprise Java development."
+tags: ["Spring Boot", "JPA", "Java", "PostgreSQL", "Bootstrap"]
+readTime: "4 min read"
+---
+
 ## Introduction
 
-The F1 Management System is a REST API I built using Spring Boot to manage Formula 1 teams, drivers, races, and standings. This project was a deep dive into enterprise-level Java development and RESTful API design.
+The F1 Management System is a full-stack Spring Boot web application I built for my Programming 3 course at Karel de Grote University. This project demonstrates enterprise Java patterns by implementing the same application with **four different persistence strategies** - from simple in-memory collections to production-ready Spring Data JPA.
 
 ## Project Goals
 
-I wanted to create a system that could:
-- Manage F1 teams and their drivers
-- Track race results and standings
-- Calculate championship points automatically
-- Provide endpoints for data analysis
+This was an educational project designed to showcase:
+- **Multiple persistence layer implementations** (ArrayList → JDBC → JPA → Spring Data)
+- **Advanced ORM features** (Single Table Inheritance, complex relationships)
+- **Full CRUD operations** with validation and error handling
+- **Web development best practices** (MVC pattern, i18n, session management)
+- **Profile-based configuration** for switching implementations without code changes
+
+The application manages Formula 1 racing data across four core entities: Drivers, Teams, Races, and Tracks.
 
 ## Architecture
 
-### Layered Design
+### Three-Tier Layered Design
 
-I followed Spring Boot best practices with a clean layered architecture:
+I followed Spring Boot best practices with clean separation of concerns:
 
 ```
-┌─────────────────┐
-│  Controller     │  ← REST endpoints
-├─────────────────┤
-│  Service        │  ← Business logic
-├─────────────────┤
-│  Repository     │  ← Data access
-├─────────────────┤
-│  Entity         │  ← Database models
-└─────────────────┘
+┌─────────────────────┐
+│  Presentation       │  ← Thymeleaf templates + Controllers
+├─────────────────────┤
+│  Business Logic     │  ← Service layer
+├─────────────────────┤
+│  Persistence        │  ← 4 different repository implementations
+└─────────────────────┘
 ```
+
+### Four Repository Implementations
+
+The unique aspect of this project is that I implemented the **same repository interface** four different ways:
+
+1. **Collection-based** (`@Profile("collection")`)
+   - In-memory ArrayList storage
+   - Manual ID generation
+   - Pre-populated sample data in constructors
+   - Perfect for learning fundamentals
+
+2. **JDBC-based** (`@Profile("jdbc")`)
+   - Spring's JdbcClient for query building
+   - Manual ResultSet mapping with RowMapper
+   - Explicit SQL with LEFT JOINs for relationships
+   - KeyHolder for auto-generated IDs
+
+3. **JPA EntityManager** (`@Profile("jpa")`)
+   - `@PersistenceContext` injected EntityManager
+   - JPQL queries with TypedQuery
+   - LEFT JOIN FETCH to prevent N+1 queries
+   - Explicit persist/merge/remove operations
+
+4. **Spring Data JPA** (`@Profile("spring-data")`, **default**)
+   - Interface extends `JpaRepository<T, Integer>`
+   - Custom `@Query` annotations with `@Param`
+   - Method name queries (e.g., `findByWorldChampionshipsGreaterThan`)
+   - Minimal code, maximum power
+
+**Switching implementations** only requires changing `spring.profiles.active` in application.properties - no code modifications needed!
 
 ### Database Schema
 
-PostgreSQL database with normalized tables:
-- **Teams** - Constructor information
-- **Drivers** - Driver profiles and stats
-- **Races** - Grand Prix events
-- **Results** - Race outcomes and points
-- **Standings** - Championship rankings
+The application uses either H2 (dev) or PostgreSQL (prod) with four core entities:
 
-### Key Features
+<table>
+  <thead>
+    <tr>
+      <th>Entity</th>
+      <th>Key Properties</th>
+      <th>Relationships</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Driver</strong></td>
+      <td>name, dateOfBirth, nationality, worldChampionships</td>
+      <td>ManyToOne Team, ManyToMany Race</td>
+    </tr>
+    <tr>
+      <td><strong>Team</strong></td>
+      <td>name, foundedYear, league (enum), budgetInMillions</td>
+      <td>OneToMany Driver</td>
+    </tr>
+    <tr>
+      <td><strong>Race</strong></td>
+      <td>name, date, hasEnded (auto-calculated), winner</td>
+      <td>ManyToOne Track, ManyToOne Driver (winner), ManyToMany Driver (participants)</td>
+    </tr>
+    <tr>
+      <td><strong>Track</strong></td>
+      <td>name, location, lengthKm, openedYear</td>
+      <td>OneToMany Race, uses Single Table Inheritance</td>
+    </tr>
+  </tbody>
+</table>
 
-**1. Team Management**
+### Single Table Inheritance Pattern
+
+The **Track** entity uses JPA's Single Table Inheritance to support two specialized circuit types:
+
 ```java
-@GetMapping("/teams")
-public List<TeamDTO> getAllTeams() {
-    return teamService.findAll();
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "track_type")
+public class Track {
+    // Base properties: name, location, lengthKm, openedYear
 }
 
-@PostMapping("/teams")
-public TeamDTO createTeam(@RequestBody TeamDTO teamDTO) {
-    return teamService.save(teamDTO);
+@Entity
+@DiscriminatorValue("STREET")
+public class StreetCircuit extends Track {
+    private String cityName;
+    private Integer daysToSetup;
+    private Double annualRentalCost;
+    private Boolean hasTemporaryBarriers;
+    // Example: Monaco GP
+}
+
+@Entity
+@DiscriminatorValue("PERMANENT")
+public class PermanentCircuit extends Track {
+    private Boolean hasMuseum;
+    private Integer testDaysPerYear;
+    private String facilities;
+    // Example: Silverstone
 }
 ```
 
-**2. Race Results**
-- Automatically calculate points based on finishing position
-- Update driver and constructor standings
-- Validate race data for consistency
+All track types are stored in a single database table with a discriminator column, but the application handles them polymorphically with type-specific forms and queries.
 
-**3. Statistical Endpoints**
-- Top drivers by wins
-- Team performance over a season
-- Head-to-head driver comparisons
+## Key Features
 
-## Technical Highlights
+### 1. Full CRUD Operations
 
-### DTOs and Mapping
+Complete Create, Read, Update, Delete functionality for all entities with:
+- **Bean Validation**: `@NotBlank`, `@Min`, `@Max`, `@Past` annotations
+- **Error Display**: Inline validation messages in forms
+- **Delete Confirmations**: Modal dialogs before destructive actions
+- **Polymorphic Forms**: Type-specific fields for StreetCircuit vs PermanentCircuit
 
-I used DTOs (Data Transfer Objects) to separate internal entities from API responses, ensuring clean separation of concerns:
+### 2. Advanced Query Showcase
 
+Three special pages demonstrating different query techniques:
+
+**Champions Page** - Uses Spring Data method name query:
 ```java
-public class TeamDTO {
-    private Long id;
-    private String name;
-    private String country;
-    private List<DriverDTO> drivers;
-    private Integer championshipsWon;
-}
+List<Driver> findByWorldChampionshipsGreaterThan(Integer championships);
 ```
 
-Mapping between entities and DTOs was handled by a custom mapper to keep controllers lean.
-
-### Validation
-
-Spring's validation annotations ensured data integrity:
-
+**Long Tracks Page** - Uses Java Stream API filtering:
 ```java
-@NotBlank(message = "Team name is required")
-private String name;
-
-@Min(value = 1950, message = "Year must be 1950 or later")
-private Integer foundedYear;
+trackRepository.findAll().stream()
+    .filter(track -> track.getLengthKm() > 5.0)
+    .collect(Collectors.toList());
 ```
 
-### Exception Handling
-
-Global exception handler for consistent error responses:
-
+**Upcoming Races Page** - Uses custom `@Query` with JPQL:
 ```java
-@RestControllerAdvice
-public class GlobalExceptionHandler {
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(
-        ResourceNotFoundException ex
-    ) {
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(new ErrorResponse(ex.getMessage()));
+@Query("SELECT r FROM Race r WHERE r.date >= CURRENT_DATE")
+List<Race> findUpcomingRaces();
+```
+
+### 3. Multi-Language Support (i18n)
+
+The application supports English and Bulgarian with:
+- `LocaleResolver` + `LocaleChangeInterceptor`
+- Language switcher in navbar (`?lang=en` or `?lang=bg`)
+- Separate message bundles: `messages_en.properties`, `messages_bg.properties`
+- Dynamic label rendering in Thymeleaf: `th:text="#{label.key}"`
+
+### 4. Session History Tracking
+
+A session-scoped service tracks user navigation:
+```java
+@Service
+public class SessionHistory {
+    public void addVisit(HttpSession session, String url, String pageName) {
+        // Store visit with timestamp in session attribute
+    }
+
+    public List<PageVisit> getVisits(HttpSession session) {
+        // Return last 20 visits
     }
 }
 ```
 
-## Challenges Faced
+Accessible from navbar with timestamps, allows clearing history.
 
-### 1. Complex Relationships
+### 5. Global Exception Handling
 
-Managing bidirectional relationships between teams, drivers, and results required careful JPA configuration to avoid circular references and lazy loading issues.
-
-**Solution**: Used `@JsonIgnore` and DTOs to control serialization.
-
-### 2. Points Calculation Logic
-
-F1 has complex point allocation rules (1st place = 25 points, fastest lap bonus, etc.). I had to implement this as a service layer method that could handle rule changes.
-
-### 3. Data Consistency
-
-Ensuring that updates to race results automatically recalculated standings required transactional integrity and careful service layer design.
-
-## Testing
-
-I wrote comprehensive tests for the service layer:
-- Unit tests with Mockito
-- Integration tests with an in-memory H2 database
-- API endpoint tests with MockMvc
-
-Example test:
+Unified error handling with `@ControllerAdvice`:
 ```java
-@Test
-void testCreateTeam_ShouldReturnCreatedTeam() {
-    TeamDTO teamDTO = new TeamDTO("Red Bull Racing", "Austria");
-    when(teamRepository.save(any())).thenReturn(team);
+@ControllerAdvice
+public class GlobalExceptionHandler {
 
-    TeamDTO result = teamService.create(teamDTO);
+    @ExceptionHandler(DataAccessException.class)
+    public ModelAndView handleDatabaseError(DataAccessException ex) {
+        ModelAndView mav = new ModelAndView("error/database-error");
+        mav.addObject("errorMessage", ex.getMessage());
+        return mav;
+    }
 
-    assertEquals("Red Bull Racing", result.getName());
-    verify(teamRepository, times(1)).save(any());
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ModelAndView handle404(NoResourceFoundException ex) {
+        // Custom 404 page
+    }
 }
+```
+
+Returns user-friendly error pages with detailed messages.
+
+## Technical Challenges & Solutions
+
+### Challenge 1: Polymorphic Form Handling
+
+**Problem**: How to render and process different forms for StreetCircuit vs PermanentCircuit while preserving inheritance?
+
+**Solution**:
+- Controller manually extracts `trackType` parameter
+- Conditional logic instantiates correct subclass
+- Thymeleaf conditionally renders fields: `th:if="${track.class.simpleName == 'StreetCircuit'}"`
+- Manual property copying preserves subclass-specific data on edit
+
+```java
+@PostMapping("/tracks/add")
+public String addTrack(@RequestParam("trackType") String trackType, ...) {
+    Track track;
+    if ("STREET".equals(trackType)) {
+        StreetCircuit sc = new StreetCircuit();
+        sc.setCityName(cityName);
+        // ... set street-specific properties
+        track = sc;
+    } else {
+        PermanentCircuit pc = new PermanentCircuit();
+        pc.setHasMuseum(hasMuseum);
+        // ... set permanent-specific properties
+        track = pc;
+    }
+    trackRepository.save(track);
+}
+```
+
+### Challenge 2: N+1 Query Problem
+
+**Problem**: Fetching teams with their drivers caused N+1 queries (1 for teams + N for each team's drivers).
+
+**Solution**: Used JOIN FETCH in JPQL queries:
+```java
+@Query("SELECT DISTINCT t FROM Team t LEFT JOIN FETCH t.drivers")
+List<Team> findAllWithDrivers();
+```
+
+This loads everything in a single query with a LEFT JOIN.
+
+### Challenge 3: Maintaining Interface Consistency Across 4 Implementations
+
+**Problem**: Each repository implementation needs identical public API despite wildly different internal logic.
+
+**Solution**:
+- Defined `IRepository<T>` base interface with CRUD methods
+- Extended with entity-specific interfaces (e.g., `IDriverRepository`)
+- All 4 implementations conform to same contract
+- Profile annotations ensure only one is active at runtime
+- Service layer depends on interface, not concrete implementation
+
+### Challenge 4: Auto-Calculating Race Status
+
+**Problem**: Races have a `hasEnded` property that should automatically update based on whether `race.date` is in the past.
+
+**Solution**: JPA `@PrePersist` and `@PreUpdate` lifecycle callbacks:
+```java
+@PrePersist
+@PreUpdate
+private void calculateHasEnded() {
+    this.hasEnded = this.date != null &&
+                    this.date.isBefore(LocalDate.now());
+}
+```
+
+Automatically runs before every save/update operation.
+
+## Frontend Implementation
+
+### Thymeleaf + Bootstrap 5.3
+
+The web interface uses server-side rendering with Thymeleaf templates:
+- **Fragments**: Reusable navbar, footer, header components
+- **Forms**: Bean-backed with validation error display
+- **Tables**: Sortable lists with action buttons
+- **Responsive Design**: Bootstrap grid system
+- **Icons**: Bootstrap Icons library
+
+Example template pattern:
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+
+    <main class="container mt-4">
+        <!-- Page-specific content -->
+        <h1 th:text="#{page.title}">Drivers</h1>
+
+        <table class="table">
+            <tr th:each="driver : ${drivers}">
+                <td th:text="${driver.name}"></td>
+                <td th:text="${driver.age}"></td>
+            </tr>
+        </table>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
+```
+
+## Configuration & Profiles
+
+### Profile-Based Bean Selection
+
+Spring profiles control which repository implementation is active:
+
+```properties
+# application.properties
+spring.profiles.active=spring-data,prod
+```
+
+**Available profiles**:
+- `collection` - ArrayList in-memory
+- `jdbc` - Spring JdbcClient
+- `jpa` - EntityManager
+- `spring-data` - JpaRepository (default)
+- `dev` - H2 database
+- `prod` - PostgreSQL database
+
+### Database Configuration
+
+**Development (H2)**:
+```properties
+spring.datasource.url=jdbc:h2:mem:f1db
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+```
+
+**Production (PostgreSQL)**:
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/pro3_db
+spring.datasource.username=postgres
+spring.datasource.password=Student_1234
+spring.jpa.hibernate.ddl-auto=update
 ```
 
 ## What I Learned
 
-- **Spring Boot ecosystem**: Dependency injection, JPA, validation, and REST
-- **API design**: RESTful principles, proper status codes, and versioning
-- **Database design**: Normalization, indexes, and query optimization
-- **Testing**: Writing maintainable tests for different layers
-- **Project structure**: Organizing a multi-layered enterprise application
+### Technical Skills
 
-## Future Enhancements
+**Spring Framework Mastery**:
+- Dependency injection and IoC container
+- Profile-based bean selection
+- JPA entity relationships and inheritance strategies
+- Global exception handling with `@ControllerAdvice`
+- Internationalization (i18n) with MessageSource
 
-- Add authentication and role-based access control
-- Implement caching for frequently accessed data
-- Create scheduled jobs for automated updates from real F1 data sources
-- Add GraphQL support alongside REST
-- Deploy with Docker and CI/CD pipeline
+**Persistence Evolution**:
+- Understanding the **why** behind abstraction layers
+- Trade-offs between manual control (JDBC) vs convenience (Spring Data)
+- How ORMs solve the object-relational impedance mismatch
+- Query optimization techniques (JOIN FETCH, lazy loading)
+
+**Web Development**:
+- MVC pattern implementation with Spring
+- Server-side rendering with Thymeleaf
+- Form validation and error handling
+- Session management and state tracking
+- RESTful URL design
+
+### Software Engineering Principles
+
+**Design Patterns**:
+- **Repository Pattern**: Abstraction over data access
+- **Strategy Pattern**: Swappable repository implementations
+- **Template Pattern**: Reusable Thymeleaf fragments
+- **Adapter Pattern**: Spring Data repositories wrapped in common interface
+
+**SOLID Principles**:
+- **Single Responsibility**: Each layer has one job
+- **Open/Closed**: Can add new repository implementations without modifying existing code
+- **Liskov Substitution**: All 4 repository implementations are interchangeable
+- **Interface Segregation**: Entity-specific repository interfaces
+- **Dependency Inversion**: Service layer depends on abstractions, not concrete implementations
+
+## Project Statistics
+
+- **Lines of Java Code**: ~3,000+
+- **Entity Classes**: 6 (4 base + 2 subclasses)
+- **Controllers**: 5
+- **Services**: 5 (with interfaces)
+- **Repository Implementations**: 16 (4 entities × 4 strategies)
+- **Thymeleaf Templates**: 20+
+- **Supported Languages**: 2 (English, Bulgarian)
+- **Database Tables**: 4 (with Single Table Inheritance)
+
+## Running the Application
+
+**Build with Gradle**:
+```bash
+./gradlew build
+```
+
+**Run development server**:
+```bash
+./gradlew bootRun
+```
+
+**Access application**:
+- Main app: http://localhost:8080
+- H2 Console (dev only): http://localhost:8080/h2-console
+
+**Switch repository implementation**:
+Edit `application.properties`:
+```properties
+spring.profiles.active=jdbc,dev  # Use JDBC with H2
+```
 
 ## Conclusion
 
-This project solidified my understanding of backend development with Spring Boot. It taught me how to design scalable APIs, work with relational databases, and follow enterprise development patterns. The experience has been invaluable for my growth as a full-stack developer.
+The F1 Management System is more than just a CRUD application - it's an **educational journey through enterprise Java development**. By implementing the same functionality four different ways, I gained deep insights into:
+
+- **Abstraction vs Simplicity**: When complexity pays off and when it doesn't
+- **Framework Evolution**: Why Spring Data exists and what problems it solves
+- **Production Considerations**: Error handling, validation, session management, i18n
+- **ORM Advanced Features**: Inheritance strategies, relationship mapping, lazy loading
+
+This project demonstrates that understanding **the fundamentals** (ArrayList, JDBC) is crucial before leveraging **high-level abstractions** (Spring Data). It showcases Spring Boot best practices while maintaining clean, maintainable code that scales from simple collections to enterprise-grade JPA repositories.
+
+The ability to switch persistence strategies via configuration exemplifies the power of dependency injection and interface-based design - core principles for any enterprise Java developer.
 
 ---
 
-**Tech Stack**: Java, Spring Boot, PostgreSQL, JPA/Hibernate, Maven, JUnit, Mockito
+**Tech Stack**: Java 21, Spring Boot 3.5.6, Spring Data JPA, Thymeleaf, Bootstrap 5.3.3, PostgreSQL, H2, Gradle, Lombok
+
+**Repository**: [github.com/DanielNed11/F1-Management-System](https://github.com/DanielNed11/F1-Managmant-System)

@@ -1,48 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle.jsx";
 
-function NavigationBar({ activeSection }) {
+function NavigationBar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const firstFocusableRef = useRef(null);
     const hamburgerRef = useRef(null);
     const location = useLocation();
-    const navigate = useNavigate();
-
-    const scrollTo = (id) => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-            setMenuOpen(false);
-        }
-    };
-
-    const handleNavClick = (item) => {
-        if (item.route) {
-            // Navigate to route-based pages
-            navigate(item.route);
-            setMenuOpen(false);
-        } else if (item.id) {
-            // Handle scroll-based navigation
-            if (location.pathname !== '/') {
-                // If not on main page, navigate to main first then scroll
-                navigate('/');
-                setTimeout(() => scrollTo(item.id), 100);
-            } else {
-                scrollTo(item.id);
-            }
-        }
-    };
 
     const navItems = [
-        {id: "home", label: "Home"},
-        {route: "/about", label: "About"},
-        {id: "journey", label: "Journey"},
-        {id: "projects", label: "Projects"},
-        {route: "/blog", label: "Blog"},
-        {id: "contact", label: "Contact"}
+        { route: "/", label: "Home" },
+        { route: "/about", label: "About Me" },
+        { route: "/skills", label: "Skills" },
+        { route: "/journey", label: "Journey" },
+        { route: "/projects", label: "Projects" },
+        { route: "/blog", label: "Blog" },
+        { route: "/contact", label: "Contact" }
     ];
+
+    // Scroll to top on route change
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location.pathname]);
 
     // Scroll effect for navbar background
     useEffect(() => {
@@ -118,6 +98,13 @@ function NavigationBar({ activeSection }) {
         }
     };
 
+    const isActive = (route) => {
+        if (route === '/') {
+            return location.pathname === '/';
+        }
+        return location.pathname.startsWith(route);
+    };
+
     return (
         <>
             {/* Mobile backdrop */}
@@ -151,33 +138,20 @@ function NavigationBar({ activeSection }) {
                         role="menu"
                     >
                         {navItems.map((item, index) => (
-                            <a
-                                key={item.id || item.route}
+                            <Link
+                                key={item.route}
                                 ref={index === 0 ? firstFocusableRef : null}
-                                href={item.route || `#${item.id}`}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleNavClick(item);
-                                }}
+                                to={item.route}
+                                onClick={() => setMenuOpen(false)}
                                 onKeyDown={(e) => handleKeyDown(e, index)}
-                                className={`nav-link ${
-                                    (item.route && location.pathname === item.route) ||
-                                    (item.id && activeSection === item.id && location.pathname === '/')
-                                        ? 'active'
-                                        : ''
-                                }`}
+                                className={`nav-link ${isActive(item.route) ? 'active' : ''}`}
                                 role="menuitem"
                                 tabIndex={menuOpen || window.innerWidth > 768 ? 0 : -1}
                                 aria-label={`Navigate to ${item.label}`}
-                                aria-current={
-                                    (item.route && location.pathname === item.route) ||
-                                    (item.id && activeSection === item.id)
-                                        ? 'page'
-                                        : undefined
-                                }
+                                aria-current={isActive(item.route) ? 'page' : undefined}
                             >
                                 {item.label}
-                            </a>
+                            </Link>
                         ))}
                     </div>
                     <ThemeToggle />

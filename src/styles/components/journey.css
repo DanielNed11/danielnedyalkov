@@ -1,45 +1,98 @@
-/* ===== JOURNEY SECTION ===== */
-.journey-section {
-    position: relative;
-    padding: 4rem 0;
+/* ===== JOURNEY PAGE STYLES ===== */
+
+/* Hero Section - Uses unified .hero-section styles from hero.css */
+/* Classes: .hero-section, .hero-title, .hero-icon, .hero-subtitle */
+/* All hero styling is controlled by hero.css for consistency across pages */
+
+/* Stats Section - Uses unified styles from stats.css */
+/* All stats styling is controlled by stats.css for consistency across pages */
+
+/* Timeline Section */
+.journey-timeline-section {
+    padding: 5rem 0;
+    background: var(--bg);
 }
 
-/* ===== JOURNEY HEADER ===== */
-.journey-header {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.journey-header.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.journey-stats {
+.section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 3rem;
-    margin-top: 2rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
-.stat-item {
+.section-icon {
+    color: var(--accent);
+    font-size: 0.9em;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 0;
     text-align: center;
 }
 
-.stat-number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1;
-    margin-bottom: 0.5rem;
+/* Download All Certificates Button */
+.btn-download-all {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: white;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(74, 157, 122, 0.3);
+    cursor: pointer;
+    font-size: 1rem;
 }
 
-.stat-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.btn-download-all::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-download-all:hover::before {
+    left: 100%;
+}
+
+.btn-download-all:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(74, 157, 122, 0.4);
+}
+
+[data-theme="dark"] .btn-download-all {
+    box-shadow: 0 4px 16px rgba(147, 120, 188, 0.4);
+}
+
+[data-theme="dark"] .btn-download-all:hover {
+    box-shadow: 0 8px 24px rgba(147, 120, 188, 0.5);
+}
+
+.btn-download-all:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.btn-download-all:active {
+    transform: translateY(0);
 }
 
 /* ===== TIMELINE CONTAINER ===== */
@@ -49,8 +102,6 @@
     margin: 3rem auto 0;
     padding: 2rem 0;
 }
-
-/* NO central line - modern floating design */
 
 /* ===== TIMELINE ITEM ===== */
 .timeline-item {
@@ -70,26 +121,31 @@
     transform: translateY(0);
 }
 
-/* Subtle connection indicator between cards */
+/* Enhanced gradient connection indicator between cards */
 .timeline-item:not(:last-child)::before {
     content: '';
     position: absolute;
     width: 2px;
-    height: 20px;
-    background: linear-gradient(180deg, var(--accent), transparent);
+    height: 24px;
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-hover) 50%, transparent 100%);
     left: 50%;
     margin-left: -1px;
     bottom: -30px;
-    opacity: 0.3;
+    opacity: 0.4;
     z-index: 0;
+    box-shadow: 0 2px 8px rgba(74, 157, 122, 0.3);
 }
 
-/* ===== TIMELINE CONTENT ===== */
+[data-theme="dark"] .timeline-item:not(:last-child)::before {
+    box-shadow: 0 2px 8px rgba(147, 120, 188, 0.4);
+}
+
+/* ===== TIMELINE CONTENT - ENHANCED HOME PAGE QUALITY ===== */
 .timeline-content {
     padding: 2rem;
     background-color: var(--card-bg);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     position: relative;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
@@ -98,8 +154,10 @@
 
 [data-theme="dark"] .timeline-content {
     border-color: rgba(147, 120, 188, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Gradient accent bar on left edge */
 .timeline-content::before {
     content: '';
     position: absolute;
@@ -107,7 +165,7 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background: linear-gradient(180deg, var(--accent), var(--accent-hover));
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-hover) 100%);
     opacity: 0;
     transition: opacity 0.4s ease;
 }
@@ -118,12 +176,21 @@
 
 .timeline-content:hover {
     transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    box-shadow: 0 20px 40px rgba(74, 157, 122, 0.15);
     border-color: var(--accent);
 }
 
 [data-theme="dark"] .timeline-content:hover {
-    box-shadow: 0 20px 40px rgba(166, 136, 212, 0.25);
+    box-shadow: 0 20px 40px rgba(147, 120, 188, 0.25);
+}
+
+.timeline-content:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.timeline-content:active {
+    transform: translateY(-8px);
 }
 
 /* ===== TIMELINE HEADER ===== */
@@ -139,7 +206,7 @@
     width: 56px;
     height: 56px;
     border-radius: 16px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -147,11 +214,30 @@
     flex-shrink: 0;
     box-shadow: 0 8px 24px rgba(74, 157, 122, 0.35);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 24px;
+    font-size: 1.5rem;
+    position: relative;
+    overflow: hidden;
 }
 
 [data-theme="dark"] .timeline-icon-badge {
     box-shadow: 0 8px 24px rgba(147, 120, 188, 0.4);
+}
+
+/* Subtle shine effect on icon badge */
+.timeline-icon-badge::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.timeline-content:hover .timeline-icon-badge::before {
+    opacity: 1;
 }
 
 .timeline-item.visible .timeline-icon-badge {
@@ -184,11 +270,12 @@
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    padding: 6px 16px;
-    background: rgba(74, 157, 122, 0.12);
-    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    background: rgba(74, 157, 122, 0.1);
+    border-radius: 20px;
     flex-shrink: 0;
     border: 1px solid rgba(74, 157, 122, 0.2);
+    transition: all 0.3s ease;
 }
 
 [data-theme="dark"] .timeline-date {
@@ -196,9 +283,19 @@
     border-color: rgba(166, 136, 212, 0.25);
 }
 
+.timeline-content:hover .timeline-date {
+    background: rgba(74, 157, 122, 0.15);
+    border-color: var(--accent);
+    transform: scale(1.05);
+}
+
+[data-theme="dark"] .timeline-content:hover .timeline-date {
+    background: rgba(166, 136, 212, 0.2);
+}
+
 /* ===== TYPOGRAPHY ===== */
 .timeline-title {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
     font-weight: 700;
     margin-bottom: 0.5rem;
     color: var(--text);
@@ -206,7 +303,7 @@
 }
 
 .timeline-subtitle {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
     color: var(--text-muted);
     margin-bottom: 1.25rem;
     font-weight: 500;
@@ -219,7 +316,7 @@
     margin-bottom: 1.5rem;
 }
 
-/* ===== SKILLS SECTION ===== */
+/* ===== SKILLS SECTION - ENHANCED ===== */
 .timeline-skills {
     margin-bottom: 1.5rem;
 }
@@ -232,6 +329,9 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
     opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .skills-tags {
@@ -245,15 +345,34 @@
     padding: 0.5rem 1rem;
     background: rgba(74, 157, 122, 0.08);
     border: 1px solid rgba(74, 157, 122, 0.15);
-    border-radius: 8px;
+    border-radius: 12px;
     color: var(--text);
-    font-weight: 500;
+    font-weight: 600;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
 }
 
 [data-theme="dark"] .skill-tag {
     background: rgba(166, 136, 212, 0.1);
     border-color: rgba(166, 136, 212, 0.2);
+}
+
+/* Shine effect on skill tags */
+.skill-tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.4s ease;
+}
+
+.skill-tag:hover::before {
+    left: 100%;
 }
 
 .skill-tag:hover {
@@ -264,13 +383,22 @@
     box-shadow: 0 4px 12px rgba(74, 157, 122, 0.3);
 }
 
-/* ===== CERTIFICATE BUTTON ===== */
+[data-theme="dark"] .skill-tag:hover {
+    box-shadow: 0 4px 12px rgba(147, 120, 188, 0.4);
+}
+
+.skill-tag:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ===== CERTIFICATE BUTTON - ENHANCED ===== */
 .btn-certificate {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
     border: none;
     color: white;
     border-radius: 30px;
@@ -281,8 +409,14 @@
     box-shadow: 0 4px 16px rgba(74, 157, 122, 0.3);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
+[data-theme="dark"] .btn-certificate {
+    box-shadow: 0 4px 16px rgba(147, 120, 188, 0.4);
+}
+
+/* Shine effect on certificate button */
 .btn-certificate::before {
     content: '';
     position: absolute;
@@ -299,34 +433,124 @@
 }
 
 .btn-certificate:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(74, 157, 122, 0.4);
     color: white;
     text-decoration: none;
 }
 
+[data-theme="dark"] .btn-certificate:hover {
+    box-shadow: 0 8px 24px rgba(147, 120, 188, 0.5);
+}
+
+.btn-certificate:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+    color: white;
+}
+
 .btn-certificate:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 4px 12px rgba(74, 157, 122, 0.35);
+}
+
+[data-theme="dark"] .btn-certificate:active {
+    box-shadow: 0 4px 12px rgba(147, 120, 188, 0.45);
+}
+
+.btn-certificate i {
+    transition: transform 0.3s ease;
+}
+
+.btn-certificate:hover i {
+    transform: translateX(4px);
+}
+
+/* Call to Action Section */
+.journey-cta {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 2px solid rgba(74, 157, 122, 0.1);
+}
+
+[data-theme="dark"] .journey-cta {
+    border-top-color: rgba(147, 120, 188, 0.15);
+}
+
+.journey-cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 3rem;
+    background: linear-gradient(135deg,
+        rgba(74, 157, 122, 0.03) 0%,
+        rgba(74, 157, 122, 0.08) 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(74, 157, 122, 0.1);
+}
+
+[data-theme="dark"] .journey-cta-content {
+    background: linear-gradient(135deg,
+        rgba(147, 120, 188, 0.03) 0%,
+        rgba(147, 120, 188, 0.08) 100%);
+    border-color: rgba(147, 120, 188, 0.15);
+}
+
+.journey-cta-icon {
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+}
+
+.journey-cta-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.journey-cta-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-bottom: 0;
 }
 
 /* ===== MOBILE RESPONSIVENESS ===== */
-@media screen and (max-width: 768px) {
-    .journey-stats {
-        gap: 2rem;
-    }
+@media screen and (max-width: 992px) {
+    /* Hero and stats responsive styles handled by hero.css and stats.css */
 
-    .stat-number {
-        font-size: 2rem;
+    .journey-timeline-section {
+        padding: 4rem 0;
     }
 
     .timeline-item {
         margin-bottom: 2.5rem;
-        padding: 0 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Hero and stats responsive styles handled by hero.css and stats.css */
+
+    .journey-timeline-section {
+        padding: 3rem 0;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .btn-download-all {
+        padding: 0.85rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .timeline-item {
+        margin-bottom: 2.5rem;
+        padding: 0 0.75rem;
     }
 
     .timeline-item:not(:last-child)::before {
-        height: 15px;
-        bottom: -25px;
+        height: 18px;
+        bottom: -26px;
     }
 
     .timeline-content {
@@ -334,13 +558,13 @@
     }
 
     .timeline-header {
-        gap: 12px;
+        gap: 0.875rem;
     }
 
     .timeline-icon-badge {
         width: 48px;
         height: 48px;
-        font-size: 20px;
+        font-size: 1.25rem;
     }
 
     .timeline-title {
@@ -350,28 +574,192 @@
     .timeline-subtitle {
         font-size: 1rem;
     }
+
+    .btn-certificate {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+    }
+
+    .journey-cta-content {
+        padding: 2rem;
+    }
+
+    .journey-cta-title {
+        font-size: 1.5rem;
+    }
+
+    .journey-cta-text {
+        font-size: 1rem;
+    }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 576px) {
+    /* Hero and stats responsive styles handled by hero.css and stats.css */
+
+    .journey-timeline-section {
+        padding: 2.5rem 0;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        justify-content: center;
+    }
+
+    .section-subtitle {
+        font-size: 1rem;
+    }
+
+    .btn-download-all {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.85rem;
+    }
+
     .timeline-content {
         padding: 1.25rem;
     }
 
-    .stat-number {
-        font-size: 1.75rem;
-    }
-
-    .stat-label {
-        font-size: 0.8rem;
+    .timeline-item:not(:last-child)::before {
+        height: 16px;
+        bottom: -24px;
     }
 
     .timeline-icon-badge {
         width: 44px;
         height: 44px;
-        font-size: 18px;
+        font-size: 1.125rem;
+        border-radius: 12px;
     }
 
     .timeline-title {
         font-size: 1.2rem;
+    }
+
+    .timeline-date {
+        padding: 0.4rem 0.875rem;
+        font-size: 0.8rem;
+    }
+
+    .btn-certificate {
+        padding: 0.7rem 1.25rem;
+        font-size: 0.85rem;
+        gap: 0.5rem;
+    }
+
+
+    .timeline-content {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .timeline-icon-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .skills-tags {
+        gap: 0.5rem;
+    }
+
+    .skill-tag {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .journey-cta {
+        margin-top: 3rem;
+        padding-top: 2rem;
+    }
+
+    .journey-cta-content {
+        padding: 1.5rem;
+    }
+
+    .journey-cta-icon {
+        font-size: 24px;
+        margin-bottom: 1rem;
+    }
+
+    .journey-cta-title {
+        font-size: 1.3rem;
+    }
+
+    .journey-cta-text {
+        font-size: 0.95rem;
+    }
+}
+
+/* ===== ACCESSIBILITY - REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+    /* Hero and stats animations handled by hero.css and stats.css */
+    .timeline-item,
+    .timeline-content,
+    .timeline-icon-badge,
+    .timeline-date,
+    .skill-tag,
+    .btn-certificate,
+    .btn-download-all,
+    .journey-stat-number {
+        transition: none;
+        animation: none;
+    }
+
+    .timeline-content:hover,
+    .timeline-content:hover .timeline-icon-badge,
+    .timeline-content:hover .timeline-date,
+    .skill-tag:hover,
+    .btn-certificate:hover,
+    .btn-download-all:hover {
+        transform: none;
+    }
+
+    .timeline-item:not(:last-child)::before,
+    .timeline-content::before,
+    .timeline-icon-badge::before,
+    .skill-tag::before,
+    .btn-certificate::before {
+        transition: none;
+    }
+
+    .btn-certificate:hover i {
+        transform: none;
+    }
+}
+
+/* ===== FOCUS VISIBLE STYLES FOR ACCESSIBILITY ===== */
+button:focus-visible,
+a:focus-visible,
+.timeline-content:focus-visible,
+.skill-tag:focus-visible,
+.btn-certificate:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* High contrast focus indicators */
+@media (prefers-contrast: high) {
+    .btn-download-all:focus-visible,
+    .btn-certificate:focus-visible {
+        outline-width: 4px;
+        outline-offset: 5px;
+    }
+
+    .timeline-content {
+        border-width: 2px;
+    }
+}
+
+/* Ensure sufficient touch target size */
+@media (pointer: coarse) {
+    .btn-download-all,
+    .btn-certificate {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .skill-tag {
+        min-height: 32px;
+        padding: 0.5rem 1rem;
     }
 }

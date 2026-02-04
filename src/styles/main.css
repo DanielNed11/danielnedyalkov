@@ -2,6 +2,9 @@
 
 @import './components/navbar.css';
 @import './components/hero.css';
+@import './components/stats.css';
+@import './components/home.css';
+@import './components/about-me.css';
 @import './components/skills.css';
 @import './components/projects.css';
 @import './components/contact.css';
@@ -9,4 +12,5 @@
 @import './components/learning.css';
 @import './components/back-to-top.css';
 @import './components/blog.css';
+@import './components/journey.css';
 @import 'components/utilities.css';

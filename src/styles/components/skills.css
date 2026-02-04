@@ -1,3 +1,7 @@
+/* ===== SKILLS PAGE HERO ===== */
+/* Hero Section - Uses unified .hero-section, .hero-title, .hero-icon, .hero-subtitle from hero.css */
+/* No page-specific hero overrides needed */
+
 /* ===== ABOUT CONTENT CARD ===== */
 .about-content-card {
     background: var(--card-bg);

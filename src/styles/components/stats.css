@@ -1,0 +1,292 @@
+/* ===== UNIFIED STATS COMPONENT STYLES ===== */
+
+/* Base Stats Section */
+.stats-section {
+    padding: 2rem 0;
+    min-height: 35vh;
+    height: 35vh;
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+}
+
+/* Stats Section with Gradient Background Variant */
+.stats-section.stats-gradient {
+    background: linear-gradient(135deg,
+        rgba(74, 157, 122, 0.05) 0%,
+        rgba(74, 157, 122, 0.1) 100%);
+}
+
+[data-theme="dark"] .stats-section.stats-gradient {
+    background: linear-gradient(135deg,
+        rgba(147, 120, 188, 0.05) 0%,
+        rgba(147, 120, 188, 0.1) 100%);
+}
+
+/* Base Stat Card */
+.stat-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(74, 157, 122, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .stat-card {
+    border-color: rgba(147, 120, 188, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient top border reveal on hover */
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-hover) 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(74, 157, 122, 0.15);
+    border-color: var(--accent);
+}
+
+.stat-card:hover::before {
+    transform: scaleX(1);
+}
+
+[data-theme="dark"] .stat-card:hover {
+    box-shadow: 0 8px 24px rgba(147, 120, 188, 0.25);
+}
+
+.stat-card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.stat-card:active {
+    transform: translateY(-2px);
+}
+
+/* Stat Icon */
+.stat-icon {
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Icon Color Variants */
+.stat-icon.success {
+    color: #4a9d7a;
+}
+
+[data-theme="dark"] .stat-icon.success {
+    color: #66d9a1;
+}
+
+.stat-icon.warning {
+    color: #e8a735;
+}
+
+[data-theme="dark"] .stat-icon.warning {
+    color: #ffc857;
+}
+
+.stat-icon.info {
+    color: #6b9db8;
+}
+
+[data-theme="dark"] .stat-icon.info {
+    color: #8eb8d6;
+}
+
+.stat-icon.primary {
+    color: var(--accent);
+}
+
+/* Stat Value/Number */
+.stat-value {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-value {
+    transform: scale(1.05);
+}
+
+/* Stat Value Small Variant (for text-based values) */
+.stat-value.small {
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    min-height: 2.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Stat Label */
+.stat-label {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Large tablets and small desktops (≤992px) */
+@media (max-width: 992px) {
+    .stats-section {
+        padding: 1.75rem 0;
+        min-height: 35vh;
+        height: 35vh;
+    }
+
+    .stat-card {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .stat-value {
+        font-size: clamp(1.75rem, 3.5vw, 2rem);
+    }
+
+    .stat-icon {
+        font-size: 1.75rem;
+    }
+}
+
+/* Tablets (≤768px) */
+@media (max-width: 768px) {
+    .stats-section {
+        padding: 1.5rem 0;
+        min-height: 40vh;
+        height: 40vh;
+    }
+
+    .stat-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .stat-value {
+        font-size: clamp(1.5rem, 3vw, 1.75rem);
+    }
+
+    .stat-icon {
+        font-size: 1.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+    }
+
+    .stat-value.small {
+        font-size: clamp(0.95rem, 1.8vw, 1rem);
+        min-height: 2.4rem;
+    }
+}
+
+/* Mobile devices (≤576px) */
+@media (max-width: 576px) {
+    .stats-section {
+        padding: 1.5rem 0;
+        min-height: auto;
+        height: auto;
+    }
+
+    .stat-card {
+        padding: 1.25rem 1rem;
+    }
+
+    .stat-icon {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .stat-value {
+        font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    .stat-value.small {
+        font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+        min-height: 2.2rem;
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .stat-card,
+    .stat-card::before,
+    .stat-icon,
+    .stat-value {
+        transition: none;
+        animation: none;
+    }
+
+    .stat-card:hover,
+    .stat-card:active {
+        transform: none;
+    }
+
+    .stat-card:hover .stat-icon,
+    .stat-card:hover .stat-value {
+        transform: none;
+    }
+}
+
+/* High contrast focus indicators */
+@media (prefers-contrast: high) {
+    .stat-card:focus-visible {
+        outline-width: 4px;
+        outline-offset: 5px;
+    }
+
+    .stat-card {
+        border-width: 2px;
+    }
+}
+
+/* Ensure sufficient touch target size */
+@media (pointer: coarse) {
+    .stat-card {
+        min-height: 44px;
+        padding: 1.5rem 1.25rem;
+    }
+}
+
+/* Focus visible styles for keyboard navigation */
+.stat-card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+}

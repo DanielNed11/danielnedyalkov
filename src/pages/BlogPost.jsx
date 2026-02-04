@@ -77,7 +77,7 @@ function BlogPost() {
                     <Col lg={8}>
                         <button
                             onClick={() => navigate('/blog')}
-                            className="btn btn-link px-0 mb-4"
+                            className="btn btn-link mb-4 mt-5"
                             style={{ textDecoration: 'none' }}
                         >
                             ← Back to Blog

@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { FaJava, FaPython, FaJsSquare, FaReact, FaGitAlt } from "react-icons/fa";
+import { FaJava, FaPython, FaJsSquare, FaReact, FaGitAlt, FaCode, FaGithub } from "react-icons/fa";
 import { SiCplusplus, SiPostgresql, SiSpring, SiBootstrap, SiArduino } from "react-icons/si";
+import Stats from "../components/Stats";
 
-function About() {
+function Skills() {
     const [flippedCards, setFlippedCards] = useState(new Set());
+    const [githubStatsError, setGithubStatsError] = useState(false);
 
     // Initialize theme based on system preference or data-theme attribute
     const getInitialTheme = () => {
@@ -69,10 +71,48 @@ function About() {
         ],
     }), []);
 
+    const statsData = useMemo(() => [
+        {
+            icon: <FaCode />,
+            value: skills.languages.length + skills.frameworks.length + skills.tools.length,
+            label: "Technologies"
+        },
+        {
+            icon: <FaJava />,
+            value: skills.languages.length,
+            label: "Languages",
+            variant: "success"
+        },
+        {
+            icon: <FaReact />,
+            value: skills.frameworks.length,
+            label: "Frameworks",
+            variant: "warning"
+        },
+        {
+            icon: <FaGitAlt />,
+            value: skills.tools.length,
+            label: "Tools",
+            variant: "info"
+        }
+    ], [skills]);
+
     const SkillCard = React.memo(
         ({ skill, category, isFlipped, onToggle }) => {
             return (
-                <div className={`skill-flip-card ${isFlipped ? 'flipped' : ''}`} onClick={onToggle}>
+                <div
+                    className={`skill-flip-card ${isFlipped ? 'flipped' : ''}`}
+                    onClick={onToggle}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            onToggle();
+                        }
+                    }}
+                    aria-label={`${skill.name} skill card. ${isFlipped ? 'Showing details' : 'Click to see details'}`}
+                >
                     <div className="skill-flip-inner">
                         <div className={`skill-flip-front skill-${category}`}>
                             <div className="skill-icon">{skill.icon}</div>
@@ -93,33 +133,25 @@ function About() {
 
     return (
         <>
-            {/* About Me Section */}
-            <section className="py-5" id="about-intro">
+            {/* Hero Section */}
+            <section className="hero-section">
                 <Container>
-                    <Row className="justify-content-center mb-5 text-center">
-                        <Col lg={10}>
-                            <h2 className="display-4 fw-bold mb-3">About Me</h2>
-                            <p className="lead text-muted">Passionate developer with expertise across the full stack</p>
-                        </Col>
-                    </Row>
-
-                    <Row className="justify-content-center">
-                        <Col lg={10}>
-                            <div className="about-content-card p-4 p-md-5 rounded shadow-sm">
-                                <p className="fs-5 mb-4 text-center">
-                                    I'm currently studying <strong>Applied Computer Science</strong> at Karel de Grote University in Antwerp, Belgium. I'm a curious developer who enjoys solving complex technical problems and turning creative ideas into real applications.
-                                </p>
-                                <p className="fs-5 mb-4 text-center">
-                                    I love challenging myself with projects that blend creativity, strategy, and problem‑solving.
-                                </p>
-                                <p className="fs-5 mb-0 text-center">
-                                    I'm always open to learning new technologies, exploring team projects, and improving my development practices. My goal is to become a versatile full-stack developer who can work across multiple layers of modern systems — from database design to front-end development and IoT integration.
-                                </p>
-                            </div>
+                    <Row className="justify-content-center text-center">
+                        <Col lg={10} xl={8}>
+                            <h1 className="hero-title">
+                                <FaCode className="hero-icon" />
+                                My Tech Stack
+                            </h1>
+                            <p className="hero-subtitle">
+                                Languages, frameworks, and tools I use to build <strong>robust</strong> and <strong>scalable</strong> applications
+                            </p>
                         </Col>
                     </Row>
                 </Container>
             </section>
+
+            {/* Stats Section */}
+            <Stats stats={statsData} className="skills-stats-section" />
 
             {/* Skills & Expertise Section */}
             <section className="py-5 skills-expertise-section">
@@ -230,7 +262,8 @@ function About() {
                                     <div className="learning-card p-4 h-100 border rounded shadow-sm">
                                         <h4 className="fw-bold mb-3">Data Science (Python)</h4>
                                         <p className="text-muted">
-                                            Exploring Pandas, NumPy, data visualization, and ML fundamentals for real-world datasets                                        </p>
+                                            Exploring Pandas, NumPy, data visualization, and ML fundamentals for real-world datasets
+                                        </p>
                                     </div>
                                 </Col>
                             </Row>
@@ -241,37 +274,66 @@ function About() {
                     <Row className="justify-content-center mt-5 mb-5">
                         <Col lg={10}>
                             <div className="text-center mb-4">
-                                <h3 className="display-6 fw-bold mb-3">GitHub Stats</h3>
+                                <h3 className="display-6 fw-bold mb-3">
+                                    <FaGithub className="me-3" style={{ color: 'var(--accent)' }} />
+                                    GitHub Stats
+                                </h3>
                                 <p className="text-muted">My coding activity and contribution overview</p>
                             </div>
-                            <Row className="g-4 justify-content-center">
-                                <Col md={6} className="text-center">
-                                    <img
-                                        src={
-                                            currentTheme === 'dark'
-                                                ? "https://github-readme-stats.vercel.app/api?username=DanielNed11&show_icons=true&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&icon_color=9378bc&text_color=e8e8e8"
-                                                : "https://github-readme-stats.vercel.app/api?username=DanielNed11&show_icons=true&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&icon_color=4a9d7a&text_color=2a2a2a"
-                                        }
-                                        alt="GitHub Stats"
-                                        className="img-fluid rounded shadow-sm"
-                                        loading="lazy"
-                                        key={currentTheme}
-                                    />
-                                </Col>
-                                <Col md={6} className="text-center">
-                                    <img
-                                        src={
-                                            currentTheme === 'dark'
-                                                ? "https://github-readme-stats.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&text_color=e8e8e8"
-                                                : "https://github-readme-stats.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&text_color=2a2a2a"
-                                        }
-                                        alt="Top Languages"
-                                        className="img-fluid rounded shadow-sm"
-                                        loading="lazy"
-                                        key={`${currentTheme}-langs`}
-                                    />
-                                </Col>
-                            </Row>
+                            {githubStatsError ? (
+                                <div className="text-center p-5 border rounded" style={{ background: 'var(--card-bg)' }}>
+                                    <FaGithub size={48} className="mb-3" style={{ color: 'var(--text-muted)' }} />
+                                    <h4>GitHub Stats Unavailable</h4>
+                                    <p className="text-muted mb-3">
+                                        The GitHub stats API is temporarily unavailable or blocked in development mode.
+                                    </p>
+                                    <p className="text-muted">
+                                        Visit my{' '}
+                                        <a
+                                            href="https://github.com/DanielNed11"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ color: 'var(--accent)', textDecoration: 'underline' }}
+                                        >
+                                            GitHub profile
+                                        </a>
+                                        {' '}to see my contributions and projects.
+                                    </p>
+                                </div>
+                            ) : (
+                                <Row className="g-4 justify-content-center">
+                                    <Col md={6} className="text-center">
+                                        <img
+                                            src={
+                                                currentTheme === 'dark'
+                                                    ? "https://github-readme-stats.vercel.app/api?username=DanielNed11&show_icons=true&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&icon_color=9378bc&text_color=e8e8e8"
+                                                    : "https://github-readme-stats.vercel.app/api?username=DanielNed11&show_icons=true&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&icon_color=4a9d7a&text_color=2a2a2a"
+                                            }
+                                            alt="GitHub Stats"
+                                            className="img-fluid rounded shadow-sm"
+                                            loading="eager"
+                                            onError={() => setGithubStatsError(true)}
+                                            key={currentTheme}
+                                            style={{ maxWidth: '100%', height: 'auto' }}
+                                        />
+                                    </Col>
+                                    <Col md={6} className="text-center">
+                                        <img
+                                            src={
+                                                currentTheme === 'dark'
+                                                    ? "https://github-readme-stats.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=react&hide_border=true&bg_color=1a171e&title_color=9378bc&text_color=e8e8e8"
+                                                    : "https://github-readme-stats.vercel.app/api/top-langs/?username=DanielNed11&layout=compact&theme=default&hide_border=true&bg_color=fdfffd&title_color=4a9d7a&text_color=2a2a2a"
+                                            }
+                                            alt="Top Languages"
+                                            className="img-fluid rounded shadow-sm"
+                                            loading="eager"
+                                            onError={() => setGithubStatsError(true)}
+                                            key={`${currentTheme}-langs`}
+                                            style={{ maxWidth: '100%', height: 'auto' }}
+                                        />
+                                    </Col>
+                                </Row>
+                            )}
                         </Col>
                     </Row>
                 </Container>
@@ -280,4 +342,4 @@ function About() {
     );
 }
 
-export default About;
+export default Skills;

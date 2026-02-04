@@ -1,4 +1,3 @@
-/* ===== CSS VARIABLES ===== */
 :root {
     --accent: #4a9d7a;
     --accent-hover: #3d8265;
@@ -11,7 +10,6 @@
     --card-bg: #fdfffd;
     --shadow: 0 4px 12px rgba(74, 157, 122, 0.12);
     --transition-speed: 0.4s;
-    --theme-transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease, fill var(--transition-speed) ease, stroke var(--transition-speed) ease;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
 }
 
@@ -28,7 +26,6 @@
     --shadow: 0 4px 12px rgba(166, 136, 212, 0.15);
 }
 
-/* ===== DARK THEME OVERRIDES ===== */
 html[data-theme="dark"] body,
 html[data-theme="dark"] main,
 html[data-theme="dark"] section,
@@ -55,6 +52,21 @@ html[data-theme="dark"] h6 {
 html[data-theme="dark"] .card {
     background: var(--card-bg);
     color: var(--text);
+    border-color: rgba(147, 120, 188, 0.15);
+}
+
+/* Ensure Bootstrap cards respect theme */
+.card {
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+/* Small text colors */
+small.text-muted,
+.small.text-muted {
+    color: var(--text-muted) !important;
 }
 
 html[data-theme="dark"] footer {
@@ -62,7 +74,6 @@ html[data-theme="dark"] footer {
     color: var(--text-muted);
 }
 
-/* ===== GLOBAL RESETS ===== */
 html, body, #root {
     margin: 0;
     padding: 0;
@@ -71,15 +82,6 @@ html, body, #root {
     scroll-behavior: smooth;
     overflow-x: hidden;
     max-width: 100vw;
-}
-
-html {
-    overflow-x: hidden;
-}
-
-body {
-    overflow-x: hidden;
-    position: relative;
 }
 
 section {
@@ -91,89 +93,25 @@ section {
     background: var(--bg);
 }
 
-/* ===== SCROLL PROGRESS BAR ===== */
-.scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
-    transform-origin: 0;
-    z-index: 9999;
-}
-
-/* Apply transitions to ALL elements during theme change */
 html.theme-transitioning,
 html.theme-transitioning *,
 html.theme-transitioning *::before,
 html.theme-transitioning *::after {
     transition: background-color 0.4s ease,
-                color 0.4s ease,
-                border-color 0.4s ease,
-                box-shadow 0.4s ease,
-                fill 0.4s ease,
-                stroke 0.4s ease,
-                opacity 0.4s ease,
-                margin 0.4s ease,
-                padding 0.4s ease !important;
-    transition-delay: 0s !important;
+    color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease !important;
 }
 
-/* Remove the individual transition rules and consolidate */
 html, body, #root, main, section, footer,
 .card, .project-card, .skill-flip-front, .skill-flip-back,
 .minimal-navbar, .contact-card {
     transition: background-color 0.4s ease,
-                color 0.4s ease,
-                border-color 0.4s ease,
-                box-shadow 0.4s ease;
+    color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
 }
 
-/* Ensure sections transition smoothly */
-section {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-    transition: background-color 0.4s ease, 
-                color 0.4s ease, 
-                padding 0.4s ease;
-}
-
-/* Add transitions to Bootstrap containers */
-.container {
-    transition: padding 0.4s ease, margin 0.4s ease;
-}
-
-
-/* Add transitions to theme-dependent elements */
-html[data-theme="dark"] body,
-html[data-theme="dark"] main,
-html[data-theme="dark"] footer {
-    /* transition handled by consolidated rule above */
-}
-
-html[data-theme="dark"] .text-muted,
-html[data-theme="dark"] .lead,
-html[data-theme="dark"] p,
-html[data-theme="dark"] h1,
-html[data-theme="dark"] h2,
-html[data-theme="dark"] h3,
-html[data-theme="dark"] h4,
-html[data-theme="dark"] h5,
-html[data-theme="dark"] h6 {
-    transition: color var(--transition-speed) ease;
-}
-
-html[data-theme="dark"] .card {
-    /* transition handled by consolidated rule above */
-}
-
-.minimal-navbar {
-    transition: background-color 0.5s ease, box-shadow 0.5s ease;
-}
-
-/* ===== ACCESSIBILITY ===== */
-/* Skip to main content link */
 .skip-link {
     position: absolute;
     top: -40px;
@@ -189,51 +127,203 @@ html[data-theme="dark"] .card {
 
 .skip-link:focus {
     top: 0;
-    outline: 2px solid var(--accent-hover);
-    outline-offset: 2px;
 }
 
-/* Focus-visible styles for better keyboard navigation */
-*:focus-visible {
+/* Focus styles for keyboard navigation - only on interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
     border-radius: 2px;
 }
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
-
-/* Remove default focus for mouse users */
-*:focus:not(:focus-visible) {
+/* Remove focus outlines from non-interactive text elements */
+h1:focus, h2:focus, h3:focus, h4:focus, h5:focus, h6:focus,
+p:focus, span:focus, div:focus {
     outline: none;
 }
 
-/* Ensure interactive elements have visible focus states */
+/* ===== BUTTON STYLES ===== */
+/* Unified button styling across the entire application */
+
+/* Base button reset - remove Bootstrap defaults */
+.btn,
+button,
+input[type="submit"],
+input[type="button"] {
+    border: none;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Primary button style */
+.btn-primary,
+.btn.btn-primary {
+    background: var(--accent) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(74, 157, 122, 0.2) !important;
+}
+
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn.btn-primary {
+    box-shadow: 0 2px 8px rgba(147, 120, 188, 0.3) !important;
+}
+
+.btn-primary:hover,
+.btn.btn-primary:hover {
+    background: var(--accent-hover) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 157, 122, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .btn.btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(147, 120, 188, 0.4) !important;
+}
+
+.btn-primary:active,
+.btn.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:focus,
+.btn.btn-primary:focus,
+.btn-primary:focus-visible,
+.btn.btn-primary:focus-visible {
+    background: var(--accent) !important;
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 2px 8px rgba(74, 157, 122, 0.2) !important;
+}
+
+/* Secondary button style */
+.btn-secondary,
+.btn.btn-secondary {
+    background: var(--card-bg) !important;
+    color: var(--text) !important;
+    border: 2px solid var(--accent) !important;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: none !important;
+}
+
+.btn-secondary:hover,
+.btn.btn-secondary:hover {
+    background: var(--accent) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 157, 122, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-secondary:hover,
+[data-theme="dark"] .btn.btn-secondary:hover {
+    box-shadow: 0 4px 12px rgba(147, 120, 188, 0.4) !important;
+}
+
+.btn-secondary:focus,
+.btn.btn-secondary:focus,
+.btn-secondary:focus-visible,
+.btn.btn-secondary:focus-visible {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px !important;
+    box-shadow: none !important;
+}
+
+/* Outline button style */
+.btn-outline-primary,
+.btn.btn-outline-primary {
+    background: transparent !important;
+    color: var(--accent) !important;
+    border: 2px solid var(--accent) !important;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: none !important;
+}
+
+.btn-outline-primary:hover,
+.btn.btn-outline-primary:hover {
+    background: var(--accent) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 157, 122, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-outline-primary:hover,
+[data-theme="dark"] .btn.btn-outline-primary:hover {
+    box-shadow: 0 4px 12px rgba(147, 120, 188, 0.4) !important;
+}
+
+.btn-outline-primary:focus,
+.btn.btn-outline-primary:focus,
+.btn-outline-primary:focus-visible,
+.btn.btn-outline-primary:focus-visible {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px !important;
+    box-shadow: none !important;
+}
+
+/* Small button size */
+.btn-sm,
+.btn.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Large button size */
+.btn-lg,
+.btn.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+/* Disabled state */
+.btn:disabled,
+.btn.disabled,
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn:disabled:hover,
+.btn.disabled:hover,
+button:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Remove all blue outlines and focus rings from Bootstrap */
+.btn:focus,
+.btn:active,
+.btn:active:focus,
+button:focus,
+button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Only show custom outline on keyboard focus (focus-visible) */
 .btn:focus-visible,
-.nav-link:focus-visible,
-.card:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(74, 157, 122, 0.2);
+button:focus-visible {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px !important;
 }
 
-[data-theme="dark"] .btn:focus-visible,
-[data-theme="dark"] .nav-link:focus-visible,
-[data-theme="dark"] .card:focus-visible {
-    box-shadow: 0 0 0 4px rgba(147, 120, 188, 0.2);
-}
-
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Card, Badge } from "react-bootstrap";
+import { FaGithub, FaClock } from "react-icons/fa";
 import placeholder from "../assets/placeholder.png";
 
 function ProjectCard({
@@ -11,6 +12,7 @@ function ProjectCard({
                          github,
                          status = "development",
                          longDescription,
+                         category
                      }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -27,81 +29,112 @@ function ProjectCard({
         }
     };
 
-    return (
-        <div style={{ height: "100%" }}>
-            <div className="project-card-wrapper" style={{ height: "100%" }}>
-                <Card className="project-card h-100 border-0">
-                    {/* Image Container with Overlay */}
-                    <div className="project-image-container position-relative overflow-hidden">
-                        <img
-                            src={image}
-                            alt={title}
-                            className="project-image"
-                            onError={handleImageError}
-                            loading="lazy" // Added lazy loading
-                        />
-                        <div className="project-overlay" />
+    const getStatusText = () => {
+        if (isFinished) return "Completed";
+        if (status === "development") return "In Progress";
+        if (status === "planning") return "Planning";
+        return "In Development";
+    };
 
-                        <Badge
-                            bg={getStatusVariant(status)}
-                            className="position-absolute top-0 end-0 m-3 px-3 py-2 z-1"
+    return (
+        <div className="project-card-wrapper">
+            <Card className="project-card h-100 border-0">
+                {/* Image Container with Overlay */}
+                <div className="project-image-container position-relative overflow-hidden">
+                    <img
+                        src={image}
+                        alt={`${title} project preview`}
+                        className="project-image"
+                        onError={handleImageError}
+                        loading="lazy"
+                    />
+                    <div className="project-overlay" />
+
+                    <Badge
+                        bg={getStatusVariant(status)}
+                        className="position-absolute top-0 end-0 m-3 px-3 py-2"
+                        style={{ zIndex: 2 }}
+                        aria-label={`Project status: ${getStatusText()}`}
+                    >
+                        {getStatusText()}
+                    </Badge>
+                </div>
+
+                <Card.Body className="d-flex flex-column p-4">
+                    <Card.Title className="h4 fw-bold mb-3 text-center">
+                        {title}
+                    </Card.Title>
+
+                    {category && (
+                        <div className="text-center mb-3">
+                            <span className="category-badge">
+                                {category}
+                            </span>
+                        </div>
+                    )}
+
+                    <Card.Text className="text-muted mb-3 text-center">
+                        {isExpanded && longDescription ? longDescription : description}
+                    </Card.Text>
+
+                    {longDescription && (
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="btn btn-link btn-sm p-0 mb-3 text-decoration-none"
+                            style={{ alignSelf: 'center' }}
+                            aria-label={isExpanded ? `Collapse description for ${title}` : `Expand description for ${title}`}
+                            aria-expanded={isExpanded}
                         >
-                            {isFinished ? "✓ Completed" : status === "development" ? "🔨 Almost Finished" : "📋 Developing"}
-                        </Badge>
+                            {isExpanded ? '← Show Less' : 'Read More →'}
+                        </button>
+                    )}
+
+                    <div className="mb-4">
+                        <div
+                            className="d-flex flex-wrap gap-2 justify-content-center"
+                            role="list"
+                            aria-label="Technologies used"
+                        >
+                            {technologies.map((tech, idx) => (
+                                <Badge
+                                    key={idx}
+                                    bg="primary"
+                                    className="tech-badge px-3 py-2"
+                                    role="listitem"
+                                    title={tech}
+                                >
+                                    {tech}
+                                </Badge>
+                            ))}
+                        </div>
                     </div>
 
-                    <Card.Body className="d-flex flex-column p-4">
-                        <Card.Title className="h4 fw-bold mb-3 text-center">{title}</Card.Title>
-                        <Card.Text className="text-muted mb-2 text-center">
-                            {isExpanded && longDescription ? longDescription : description}
-                        </Card.Text>
-
-                        {longDescription && (
-                            <button
-                                onClick={() => setIsExpanded(!isExpanded)}
-                                className="btn btn-link btn-sm p-0 mb-3 text-decoration-none"
-                                style={{ alignSelf: 'center' }}
-                                aria-label={isExpanded ? `Show less about ${title}` : `Read more about ${title}`}
-                                aria-expanded={isExpanded}
+                    <div className="mt-auto">
+                        {isFinished && github ? (
+                            <a
+                                href={github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn w-100 d-flex align-items-center justify-content-center gap-2"
+                                aria-label={`View ${title} source code on GitHub (opens in new tab)`}
                             >
-                                {isExpanded ? '← Show Less' : 'Read More →'}
+                                <FaGithub size={18} />
+                                View on GitHub
+                            </a>
+                        ) : (
+                            <button
+                                disabled
+                                className="btn w-100 btn-disabled d-flex align-items-center justify-content-center gap-2"
+                                aria-label={`${title} source code is not yet available`}
+                                title="This project's source code will be available soon"
+                            >
+                                <FaClock size={16} />
+                                Coming Soon
                             </button>
                         )}
-
-                        <div className="mb-4">
-                            <div className="d-flex flex-wrap gap-2 justify-content-center">
-                                {technologies.map((tech, idx) => (
-                                    <Badge key={idx} bg="primary" className="tech-badge px-3 py-2 align-items-center">
-                                        {tech}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="mt-auto">
-                            {isFinished && github ? (
-                                <a
-                                    href={github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn w-100"
-                                    aria-label={`View ${title} on GitHub`}
-                                >
-                                    View on GitHub
-                                </a>
-                            ) : (
-                                <button
-                                    disabled
-                                    className="btn w-100 btn-disabled"
-                                    aria-label={`${title} coming soon`}
-                                >
-                                    Coming Soon
-                                </button>
-                            )}
-                        </div>
-                    </Card.Body>
-                </Card>
-            </div>
+                    </div>
+                </Card.Body>
+            </Card>
         </div>
     );
 }

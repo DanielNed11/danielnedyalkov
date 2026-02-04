@@ -1,0 +1,283 @@
+/* ===== ABOUT ME PAGE STYLES ===== */
+
+/* Hero Section - Uses unified .hero-section styles from hero.css */
+/* Classes: .hero-section, .hero-title, .hero-icon, .hero-subtitle */
+/* All hero styling is controlled by hero.css for consistency across pages */
+
+/* Main Sections */
+.about-section {
+    padding: 5rem 0;
+    background: var(--bg);
+}
+
+.about-section-alt {
+    background: linear-gradient(180deg,
+        rgba(74, 157, 122, 0.03) 0%,
+        rgba(74, 157, 122, 0.08) 50%,
+        rgba(74, 157, 122, 0.03) 100%);
+}
+
+[data-theme="dark"] .about-section-alt {
+    background: linear-gradient(180deg,
+        rgba(147, 120, 188, 0.03) 0%,
+        rgba(147, 120, 188, 0.08) 50%,
+        rgba(147, 120, 188, 0.03) 100%);
+}
+
+.about-section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.about-section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 0;
+}
+
+/* Bio Card */
+.about-bio-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(74, 157, 122, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .about-bio-card {
+    border-color: rgba(147, 120, 188, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.about-bio-card:hover {
+    box-shadow: 0 8px 24px rgba(74, 157, 122, 0.15);
+    border-color: var(--accent);
+}
+
+[data-theme="dark"] .about-bio-card:hover {
+    box-shadow: 0 8px 24px rgba(147, 120, 188, 0.25);
+}
+
+.about-bio-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+}
+
+.about-bio-content p.lead {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/* Value Cards */
+.about-value-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(74, 157, 122, 0.1);
+    border-radius: 16px;
+    cursor: default;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .about-value-card {
+    border-color: rgba(147, 120, 188, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.about-value-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.about-value-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(74, 157, 122, 0.2);
+    border-color: var(--accent);
+}
+
+[data-theme="dark"] .about-value-card:hover {
+    box-shadow: 0 12px 32px rgba(147, 120, 188, 0.3);
+}
+
+.about-value-card:hover::before {
+    transform: scaleX(1);
+}
+
+.about-value-icon {
+    font-size: 3rem;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+}
+
+.about-value-card:hover .about-value-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+.about-value-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+}
+
+.about-value-description {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Interest Cards */
+.about-interest-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(74, 157, 122, 0.1);
+    border-radius: 16px;
+    cursor: default;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .about-interest-card {
+    border-color: rgba(147, 120, 188, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.about-interest-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(74, 157, 122, 0.2);
+    border-color: var(--accent);
+}
+
+[data-theme="dark"] .about-interest-card:hover {
+    box-shadow: 0 12px 32px rgba(147, 120, 188, 0.3);
+}
+
+.about-interest-icon {
+    font-size: 2.5rem;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+}
+
+.about-interest-card:hover .about-interest-icon {
+    transform: scale(1.15);
+}
+
+.about-interest-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.about-interest-description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* CTA Section */
+.about-cta-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg,
+        rgba(74, 157, 122, 0.05) 0%,
+        rgba(74, 157, 122, 0.1) 100%);
+}
+
+[data-theme="dark"] .about-cta-section {
+    background: linear-gradient(135deg,
+        rgba(147, 120, 188, 0.05) 0%,
+        rgba(147, 120, 188, 0.1) 100%);
+}
+
+.about-cta-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.about-cta-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    /* Hero responsive styles now in hero.css */
+
+    .about-section,
+    .about-section-alt,
+    .about-cta-section {
+        padding: 3rem 0;
+    }
+
+    .about-value-icon,
+    .about-interest-icon {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Hero responsive styles now in hero.css */
+
+    .about-section,
+    .about-section-alt,
+    .about-cta-section {
+        padding: 2.5rem 0;
+    }
+
+    .about-section-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .about-section-subtitle {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .about-bio-content p {
+        font-size: 1rem;
+    }
+
+    .about-bio-content p.lead {
+        font-size: 1.1rem;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    /* Hero icon animation now handled in hero.css */
+    .about-value-card,
+    .about-interest-card,
+    .about-value-icon,
+    .about-interest-icon {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Focus visible styles */
+.about-value-card:focus-visible,
+.about-interest-card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
